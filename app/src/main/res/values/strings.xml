@@ -6,6 +6,8 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="back">Back</string>
+    <string name="login">Login</string>
+    <string name="login_instructions">Log in using Username and Password</string>
     <string name="register_cook">Register as a Cook</string>
     <string name="register_client">Register as a Client</string>
     <string name="previous">Previous</string>
@@ -13,7 +15,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
-<!--    Fragment 2 -->
+    <!--    Fragment 2 -->
     <string name="enter_email">Enter Email</string>
     <string name="enter_password">Enter Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

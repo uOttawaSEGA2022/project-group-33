@@ -17,11 +17,14 @@ import com.example.mealerapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    private EditText mEdit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

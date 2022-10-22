@@ -12,17 +12,36 @@
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_FirstFragment_to_register_client2"
+            app:destination="@id/register_client2" />
+        <action
+            android:id="@+id/action_FirstFragment_to_register_cook2"
+            app:destination="@id/register_cook2" />
+        <action
+            android:id="@+id/action_FirstFragment_to_welcome_screen"
+            app:destination="@id/welcome_screen" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.mealerapp.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/register_client2"
+        android:name="com.example.mealerapp.register_client"
+        android:label="fragment_register_client"
+        tools:layout="@layout/fragment_register_client" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_register_client2_to_welcome_screen"
+            app:destination="@id/welcome_screen" />
     </fragment>
+    <fragment
+        android:id="@+id/register_cook2"
+        android:name="com.example.mealerapp.register_cook"
+        android:label="fragment_register_cook"
+        tools:layout="@layout/fragment_register_cook" >
+        <action
+            android:id="@+id/action_register_cook2_to_welcome_screen"
+            app:destination="@id/welcome_screen" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcome_screen"
+        android:name="com.example.mealerapp.welcome_screen"
+        android:label="fragment_welcome_screen"
+        tools:layout="@layout/fragment_welcome_screen" />
 </navigation>
