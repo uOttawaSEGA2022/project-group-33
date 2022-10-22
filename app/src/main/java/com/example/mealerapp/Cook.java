@@ -5,7 +5,7 @@ public class Cook extends User {
         super(email, password, type);
     }
 
-    public void cook() {
+    public void cookFood() {
         return;
     }
 }
