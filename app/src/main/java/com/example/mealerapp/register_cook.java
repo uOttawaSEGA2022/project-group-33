@@ -2,11 +2,25 @@ package com.example.mealerapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.example.mealerapp.databinding.FragmentRegisterCookBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,8 +35,11 @@ public class register_cook extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FragmentRegisterCookBinding binding;
+    private Database database;
+    private FirebaseFirestore fb;
+    private EditText emailEditText;
+    private EditText passwordEditText;
 
     public register_cook() {
         // Required empty public constructor
@@ -50,8 +67,6 @@ public class register_cook extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -59,6 +74,60 @@ public class register_cook extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register_cook, container, false);
+
+        database = new Database();
+        fb = database.firestore;
+        binding = FragmentRegisterCookBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @MainThread
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        binding.addCook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                emailEditText = (EditText)getView().findViewById(R.id.input_email4);
+                String email = emailEditText.getText().toString();
+
+                passwordEditText = (EditText)getView().findViewById(R.id.input_password4);
+                String password = passwordEditText.getText().toString();
+
+                if (!Helper.isValidEmail(email)) {
+                    getView().findViewById(R.id.email_error3).setVisibility(View.VISIBLE);
+                } else {
+                    getView().findViewById(R.id.email_error3).setVisibility(View.GONE);
+                }
+
+                if (!Helper.isPasswordValid(password)) {
+                    getView().findViewById(R.id.password_error3).setVisibility(View.VISIBLE);
+                } else {
+                    getView().findViewById(R.id.password_error3).setVisibility(View.GONE);
+                }
+
+                if (Helper.isValidEmail(email) && Helper.isPasswordValid(password)) {
+                    Map<String,Object> users = new HashMap<>();
+                    users.put("email", email);
+                    users.put("password", password);
+                    users.put("type", "COOK");
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("user_type", "COOK");
+
+                    fb.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            NavHostFragment.findNavController(register_cook.this)
+                                    .navigate(R.id.action_register_cook2_to_welcome_screen, bundle);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        });
     }
 }

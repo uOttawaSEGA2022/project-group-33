@@ -134,8 +134,5 @@ public class register_client extends Fragment {
                 }
             }
         });
-
-
-
     }
 }
