@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -15,13 +14,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.mealerapp.databinding.FragmentFirstBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.events.Event;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FirstFragment extends Fragment {
 
@@ -104,7 +98,6 @@ public class FirstFragment extends Fragment {
 
                                     getView().findViewById(R.id.invalid_login).setVisibility(View.GONE);
 
-
                                     if (type == User.UserType.CLIENT) {
                                         Log.v("generate_client", "yo");
                                         user[0] = new Client(email, password, type);
@@ -122,7 +115,6 @@ public class FirstFragment extends Fragment {
                                         bundle.putString("user_type", user[0].getType().toString());
                                         welcome_screen ws = new welcome_screen();
                                         ws.setArguments(bundle);
-//                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, ws);
                                         NavHostFragment.findNavController(FirstFragment.this)
                                                 .navigate(R.id.action_FirstFragment_to_welcome_screen, bundle);
                                     }

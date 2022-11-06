@@ -58,7 +58,6 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="19dp"
         android:layout_marginEnd="106dp"
-        android:onClick="goToRegisterAsCook"
         android:text="@string/register_client"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

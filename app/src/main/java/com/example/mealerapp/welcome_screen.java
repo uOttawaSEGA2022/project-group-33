@@ -64,7 +64,6 @@ public class welcome_screen extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_welcome_screen, container, false);
-
     }
 
     @MainThread
