@@ -12,6 +12,7 @@
     <string name="register_client">Register as a Client</string>
     <string name="email_error">Please enter a valid email</string>
     <string name="password_error">Please enter a password longer than 7 characters</string>
+    <string name="invalid_login">Invalid Credentials</string>
     <string name="previous">Previous</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
