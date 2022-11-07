@@ -19,14 +19,7 @@ import android.widget.TextView;
  */
 public class welcome_screen extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private User.UserType userType;
 
     public welcome_screen() {
         // Required empty public constructor
@@ -44,8 +37,6 @@ public class welcome_screen extends Fragment {
     public static welcome_screen newInstance(String param1, String param2) {
         welcome_screen fragment = new welcome_screen();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,9 +45,8 @@ public class welcome_screen extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        userType = User.UserType.valueOf(getArguments().getString("user_type"));
     }
 
     @Override
@@ -69,6 +59,16 @@ public class welcome_screen extends Fragment {
     @MainThread
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView tv = getView().findViewById(R.id.client_type);
-        tv.setText(getArguments().getString("user_type"));
+        tv.setText(userType.toString());
+
+        if (userType == User.UserType.ADMIN) {
+            showComplaints(view);
+        } else {
+            return;
+        }
+    }
+
+    public void showComplaints(@NonNull View view) {
+
     }
 }

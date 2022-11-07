@@ -19,6 +19,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +79,22 @@ public class register_cook extends Fragment {
 
         database = new Database();
         fb = database.firestore;
+
+//        Map<String,Object> complaint1 = new HashMap<>();
+//        complaint1.put("email", "admin@a.com");
+//        complaint1.put("password", "admin");
+//        complaint1.put("user_type", "ADMIN");
+//        fb.collection("users").add(complaint1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//            @Override
+//            public void onSuccess(DocumentReference documentReference) {
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+////                            Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
+//            }
+//        });
+
         binding = FragmentRegisterCookBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
