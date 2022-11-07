@@ -6,11 +6,21 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.mealerapp.databinding.ComplaintBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +30,9 @@ import android.widget.TextView;
 public class welcome_screen extends Fragment {
 
     private User.UserType userType;
+    private Database database;
+    private FirebaseFirestore fb;
+    LinearLayout myLayout;
 
     public welcome_screen() {
         // Required empty public constructor
@@ -47,6 +60,8 @@ public class welcome_screen extends Fragment {
         if (getArguments() != null) {
         }
         userType = User.UserType.valueOf(getArguments().getString("user_type"));
+        database = new Database();
+        fb = database.firestore;
     }
 
     @Override
@@ -60,6 +75,7 @@ public class welcome_screen extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         TextView tv = getView().findViewById(R.id.client_type);
         tv.setText(userType.toString());
+        myLayout = getView().findViewById(R.id.container);
 
         if (userType == User.UserType.ADMIN) {
             showComplaints(view);
@@ -69,6 +85,24 @@ public class welcome_screen extends Fragment {
     }
 
     public void showComplaints(@NonNull View view) {
+
+        database.firestore.collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (!task.getResult().isEmpty()) {
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String message = document.get("message").toString();
+                            Log.d("mesg", message);
+
+                        }
+                    } else {
+                        Log.d("Error", "Error getting documents");
+                    }
+                }
+            }
+        });
 
     }
 }
