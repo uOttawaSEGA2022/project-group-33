@@ -33,7 +33,6 @@ public class welcome_screen extends Fragment {
 
     private User.UserType userType;
     private Database database;
-    private FirebaseFirestore fb;
     LinearLayout myLayout;
     ListView complaintList;
 
@@ -64,7 +63,6 @@ public class welcome_screen extends Fragment {
         }
         userType = User.UserType.valueOf(getArguments().getString("user_type"));
         database = new Database();
-        fb = database.firestore;
     }
 
     @Override
@@ -91,7 +89,7 @@ public class welcome_screen extends Fragment {
 
     public void showComplaints(@NonNull View view, LinearLayout layout) {
 
-        ArrayList<String> complaints = new ArrayList<>();
+        ArrayList<Complaint> complaints = new ArrayList<>();
 
         database.firestore.collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -100,10 +98,14 @@ public class welcome_screen extends Fragment {
                     if (!task.getResult().isEmpty()) {
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-
                             String message = document.get("message").toString();
-                            Log.d("mesg", message);
-                            complaints.add(message);
+                            String date = document.get("date").toString();
+                            String from = document.get("from").toString();
+                            String to = document.get("to").toString();
+
+
+                            Complaint c = new Complaint(from, to, message, date, "2");
+                            complaints.add(c);
                         }
 
                         ComplaintListAdapter complaintListAdapter = new ComplaintListAdapter(getView().getContext(), complaints);
