@@ -1,6 +1,7 @@
 package com.example.mealerapp;
+import androidx.appcompat.app.AppCompatActivity;
 
-public abstract class User {
+public abstract class User extends AppCompatActivity {
 
     private String email;
     private String password;
@@ -41,5 +42,6 @@ public abstract class User {
     public void setType(UserType type) {
         this.type = type;
     }
+
 
 }
