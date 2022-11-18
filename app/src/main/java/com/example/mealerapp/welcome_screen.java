@@ -6,21 +6,23 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.mealerapp.databinding.ComplaintBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +35,7 @@ public class welcome_screen extends Fragment {
     private Database database;
     private FirebaseFirestore fb;
     LinearLayout myLayout;
+    ListView complaintList;
 
     public welcome_screen() {
         // Required empty public constructor
@@ -73,18 +76,22 @@ public class welcome_screen extends Fragment {
 
     @MainThread
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TextView tv = getView().findViewById(R.id.client_type);
-        tv.setText(userType.toString());
+//        TextView tv = getView().findViewById(R.id.client_type);
+//        tv.setText(userType.toString());
         myLayout = getView().findViewById(R.id.container);
 
+        complaintList = getView().findViewById(R.id.complaintListView);
+
         if (userType == User.UserType.ADMIN) {
-            showComplaints(view);
+            showComplaints(view, myLayout);
         } else {
             return;
         }
     }
 
-    public void showComplaints(@NonNull View view) {
+    public void showComplaints(@NonNull View view, LinearLayout layout) {
+
+        ArrayList<String> complaints = new ArrayList<>();
 
         database.firestore.collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -93,10 +100,15 @@ public class welcome_screen extends Fragment {
                     if (!task.getResult().isEmpty()) {
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
+
                             String message = document.get("message").toString();
                             Log.d("mesg", message);
-
+                            complaints.add(message);
                         }
+
+                        ComplaintListAdapter complaintListAdapter = new ComplaintListAdapter(getView().getContext(), complaints);
+                        complaintList.setAdapter(complaintListAdapter);
+
                     } else {
                         Log.d("Error", "Error getting documents");
                     }
