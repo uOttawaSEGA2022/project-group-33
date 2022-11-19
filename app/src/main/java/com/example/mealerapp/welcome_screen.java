@@ -102,13 +102,13 @@ public class welcome_screen extends Fragment {
                             String date = document.get("date").toString();
                             String from = document.get("from").toString();
                             String to = document.get("to").toString();
+                            String id = document.get("id").toString();
 
-
-                            Complaint c = new Complaint(from, to, message, date, "2");
+                            Complaint c = new Complaint(from, to, message, date, id);
                             complaints.add(c);
                         }
 
-                        ComplaintListAdapter complaintListAdapter = new ComplaintListAdapter(getView().getContext(), complaints);
+                        ComplaintListAdapter complaintListAdapter = new ComplaintListAdapter(getView().getContext(), complaints, complaintList);
                         complaintList.setAdapter(complaintListAdapter);
 
                     } else {
