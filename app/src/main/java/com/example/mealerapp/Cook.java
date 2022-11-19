@@ -33,9 +33,9 @@ public class Cook extends User {
 
 
 
-        public void cookFood () {
-            return;
-        }
+//        public void cookFood () {
+//            return;
+//        }
     }
 }
 
