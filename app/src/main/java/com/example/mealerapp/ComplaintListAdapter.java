@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,10 +17,12 @@ public class ComplaintListAdapter extends BaseAdapter {
     Context context;
     ArrayList<Complaint> complaints;
     LayoutInflater inlater;
+    ListView lv;
 
-    public ComplaintListAdapter(Context ctx, ArrayList<Complaint> complaints) {
+    public ComplaintListAdapter(Context ctx, ArrayList<Complaint> complaints, ListView lv) {
         this.context = ctx;
         this.complaints = complaints;
+        this.lv = lv;
         inlater = LayoutInflater.from(ctx);
     }
 
@@ -55,7 +58,10 @@ public class ComplaintListAdapter extends BaseAdapter {
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("yo", "yo");
                 complaints.get(i).deleteFromDatabase();
+                complaints.remove(i);
+                lv.invalidateViews();
                 return;
             }
         });

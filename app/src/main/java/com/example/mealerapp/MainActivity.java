@@ -2,8 +2,10 @@ package com.example.mealerapp;
 
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
@@ -19,13 +21,18 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.mealerapp.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,14 +45,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        database = new Database();
+//        make new complaint
+//        database = new Database();
+//
+//        database.firestore.collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                Map<String, Object> city = new HashMap<>();
+//                city.put("from", "test3@email.com");
+//                city.put("to", "cook@mail.com");
+//                city.put("message", "food was not tast22y");
+//
+//                Date c = Calendar.getInstance().getTime();
+//                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
+//                String formattedDate = df.format(c);
+//
+//                city.put("date", formattedDate);
+//                city.put("id", task.getResult().size());
+//                database.firestore.collection("complaints").document(Integer.toString(task.getResult().size())).set(city);
+//            }
+//        });
 
-        Map<String, Object> city = new HashMap<>();
-        city.put("name", "Los Angeles");
-        city.put("state", "CA");
-        city.put("country", "USA");
-
-        database.firestore.collection("complaints").document("LA").set(city);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

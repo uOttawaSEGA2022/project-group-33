@@ -1,6 +1,11 @@
 package com.example.mealerapp;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class Complaint {
 
@@ -22,17 +27,6 @@ public class Complaint {
         database = new Database();
     }
 
-    public static int getNextId() {
-        database = new Database();
-        CollectionReference collection = database.firestore.collection("complaints");
-        AggregateQuery countQuery = collection.count();
-        countQuery.get(AggregateSource.SERVER).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                AggregateQuerySnapshot snapshot = task.getResult();
-            } else {
-            }
-        });
-    }
 
     public String getFromEmail() {
         return fromEmail;
@@ -55,6 +49,6 @@ public class Complaint {
     }
 
     public void deleteFromDatabase() {
-//        database.firestore.collection("complaints").whereEqualTo("id", id).get().
+        database.firestore.collection("complaints").document(id).delete();
     }
 }

@@ -42,6 +42,6 @@
     <fragment
         android:id="@+id/welcome_screen"
         android:name="com.example.mealerapp.welcome_screen"
-        android:label="fragment_welcome_screen"
+        android:label="Welcome Screen"
         tools:layout="@layout/fragment_welcome_screen" />
 </navigation>
