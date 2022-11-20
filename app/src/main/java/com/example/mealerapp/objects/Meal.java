@@ -3,6 +3,7 @@ package com.example.mealerapp.objects;
 public class Meal {
 
     private String mealName;
+    private String from;
     private String mealDescription;
     private float price;
 

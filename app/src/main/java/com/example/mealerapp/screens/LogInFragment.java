@@ -118,7 +118,7 @@ public class LogInFragment extends Fragment {
                                     if (Helper.isValidEmail(email) && Helper.isPasswordValid(password) && user[0] != null) {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("type", user[0].getType().toString());
-                                        bundle.putString("user_type", user[0].getType().toString());
+                                        bundle.putString("email", user[0].getEmail());
                                         if (type == User.UserType.ADMIN) {
                                             adminWelcomeScreen ws = new adminWelcomeScreen();
                                             ws.setArguments(bundle);

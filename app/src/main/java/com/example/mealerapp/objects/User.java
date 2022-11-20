@@ -3,6 +3,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class User extends AppCompatActivity {
 
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private UserType type;
@@ -17,6 +19,14 @@ public abstract class User extends AppCompatActivity {
         this.email = email;
         this.password = password;
         this.type = type;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {
