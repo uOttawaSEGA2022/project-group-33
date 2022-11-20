@@ -17,10 +17,10 @@ import com.example.mealerapp.Helper;
 import com.example.mealerapp.R;
 import com.example.mealerapp.databinding.FragmentRegisterCookBinding;
 import com.example.mealerapp.objects.Database;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -75,21 +75,6 @@ public class register_cook extends Fragment {
         database = new Database();
         fb = database.getFirestore();
 
-//        Map<String,Object> complaint1 = new HashMap<>();
-//        complaint1.put("email", "admin@a.com");
-//        complaint1.put("password", "admin");
-//        complaint1.put("user_type", "ADMIN");
-//        fb.collection("users").add(complaint1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//            @Override
-//            public void onSuccess(DocumentReference documentReference) {
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-////                            Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
         binding = FragmentRegisterCookBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -119,24 +104,29 @@ public class register_cook extends Fragment {
                 }
 
                 if (Helper.isValidEmail(email) && Helper.isPasswordValid(password)) {
-                    Map<String,Object> users = new HashMap<>();
-                    users.put("email", email);
-                    users.put("password", password);
-                    users.put("type", "COOK");
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("user_type", "COOK");
-
-                    fb.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    database.getFirestore().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            Map<String,Object> users = new HashMap<>();
+                            String id = Integer.toString(task.getResult().size());
+                            users.put("email", email);
+                            users.put("password", password);
+                            users.put("type", "COOK");
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("type", "COOK");
+                            bundle.putString("email", email);
+                            bundle.putString("password", password);
+                            bundle.putString("id", id);
+
+                            database.getFirestore().collection("users").document(id).set(users);
+
+
                             NavHostFragment.findNavController(register_cook.this)
-                                    .navigate(R.id.action_register_cook2_to_welcome_screen, bundle);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
+                                    .navigate(R.id.registerCook_to_cookWelcomeScreen, bundle);
+
                         }
                     });
                 }

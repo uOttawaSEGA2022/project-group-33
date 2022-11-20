@@ -117,15 +117,18 @@ public class LogInFragment extends Fragment {
 
                                     if (Helper.isValidEmail(email) && Helper.isPasswordValid(password) && user[0] != null) {
                                         Bundle bundle = new Bundle();
+                                        bundle.putString("type", user[0].getType().toString());
                                         bundle.putString("user_type", user[0].getType().toString());
                                         if (type == User.UserType.ADMIN) {
                                             adminWelcomeScreen ws = new adminWelcomeScreen();
                                             ws.setArguments(bundle);
                                             NavHostFragment.findNavController(LogInFragment.this)
                                                     .navigate(R.id.action_FirstFragment_to_welcome_screen, bundle);
-                                        }
-                                        if (type == User.UserType.COOK) {
-
+                                        } else if (type == User.UserType.COOK) {
+                                            cookWelcomeScreen cookScreen = new cookWelcomeScreen();
+                                            cookScreen.setArguments(bundle);
+                                            NavHostFragment.findNavController(LogInFragment.this)
+                                                    .navigate(R.id.login_to_cookWelcomeScreen, bundle);
                                         }
 
                                     }

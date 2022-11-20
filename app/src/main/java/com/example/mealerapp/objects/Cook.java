@@ -17,7 +17,7 @@ public class Cook extends User {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         //super.onViewCreated(view, savedInstanceState);
-       setContentView(R.layout.cook_welcome_page);
+       setContentView(R.layout.fragment_cook_welcome_screen);
        Button addMeal = (Button) findViewById(R.id.addMeal);
        Button addMealToOffered = (Button) findViewById(R.id.addMealOffered);
        Button delMeal = (Button) findViewById(R.id.delMeal);

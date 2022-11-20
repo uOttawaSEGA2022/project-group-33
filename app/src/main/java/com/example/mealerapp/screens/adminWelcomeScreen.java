@@ -62,7 +62,7 @@ public class adminWelcomeScreen extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
-        userType = User.UserType.valueOf(getArguments().getString("user_type"));
+        userType = User.UserType.valueOf(getArguments().getString("type"));
         database = new Database();
     }
 

@@ -17,12 +17,19 @@ import com.example.mealerapp.Helper;
 import com.example.mealerapp.R;
 import com.example.mealerapp.databinding.FragmentRegisterClientBinding;
 import com.example.mealerapp.objects.Database;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -112,26 +119,30 @@ public class register_client extends Fragment {
                 }
 
                 if (Helper.isValidEmail(email) && Helper.isPasswordValid(password)) {
-                    Map<String,Object> users = new HashMap<>();
-                    users.put("email", email);
-                    users.put("password", password);
-                    users.put("type", "CLIENT");
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("user_type", "CLIENT");
-
-                    fb.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    database.getFirestore().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            Map<String,Object> users = new HashMap<>();
+                            String id = Integer.toString(task.getResult().size());
+                            users.put("email", email);
+                            users.put("password", password);
+                            users.put("type", "CLIENT");
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("type", "CLIENT");
+                            bundle.putString("email", email);
+                            bundle.putString("password", password);
+                            bundle.putString("id", id);
+
+                            database.getFirestore().collection("users").document(id).set(users);
+
                             NavHostFragment.findNavController(register_client.this)
                                     .navigate(R.id.action_register_client2_to_welcome_screen, bundle);
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-//                            Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
-                        }
                     });
+
                 }
             }
         });
