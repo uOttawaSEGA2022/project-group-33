@@ -1,15 +1,12 @@
-package com.example.mealerapp;
+package com.example.mealerapp.objects;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.annotation.NonNull;
 import android.widget.Button;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.mealerapp.databinding.FragmentFirstBinding;
+import com.example.mealerapp.R;
+import com.example.mealerapp.screens.register_cook;
 
 public class Cook extends User {
     private register_cook binding;

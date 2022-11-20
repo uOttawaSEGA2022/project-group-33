@@ -1,4 +1,4 @@
-package com.example.mealerapp;
+package com.example.mealerapp.objects;
 
 public class Admin extends User {
 

@@ -1,4 +1,4 @@
-package com.example.mealerapp;
+package com.example.mealerapp.screens;
 
 import android.os.Bundle;
 
@@ -13,33 +13,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.example.mealerapp.databinding.FragmentRegisterCookBinding;
+import com.example.mealerapp.Helper;
+import com.example.mealerapp.R;
+import com.example.mealerapp.databinding.FragmentRegisterClientBinding;
+import com.example.mealerapp.objects.Database;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link register_cook#newInstance} factory method to
+ * Use the {@link register_client#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class register_cook extends Fragment {
+public class register_client extends Fragment {
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private FragmentRegisterCookBinding binding;
+    private String mParam1;
+    private String mParam2;
+    private FragmentRegisterClientBinding binding;
     private Database database;
     private FirebaseFirestore fb;
     private EditText emailEditText;
     private EditText passwordEditText;
 
-    public register_cook() {
+    public register_client() {
         // Required empty public constructor
     }
 
@@ -49,12 +56,14 @@ public class register_cook extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment register_cook.
+     * @return A new instance of fragment register_client.
      */
     // TODO: Rename and change types and number of parameters
-    public static register_cook newInstance(String param1, String param2) {
-        register_cook fragment = new register_cook();
+    public static register_client newInstance(String param1, String param2) {
+        register_client fragment = new register_client();
         Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,6 +72,8 @@ public class register_cook extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -70,67 +81,50 @@ public class register_cook extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         database = new Database();
-        fb = database.firestore;
-
-//        Map<String,Object> complaint1 = new HashMap<>();
-//        complaint1.put("email", "admin@a.com");
-//        complaint1.put("password", "admin");
-//        complaint1.put("user_type", "ADMIN");
-//        fb.collection("users").add(complaint1).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//            @Override
-//            public void onSuccess(DocumentReference documentReference) {
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-////                            Toast.makeText(getApplicationContext(), "Failure", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
-        binding = FragmentRegisterCookBinding.inflate(inflater, container, false);
+        fb = database.getFirestore();
+        binding = FragmentRegisterClientBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @MainThread
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        binding.addCook.setOnClickListener(new View.OnClickListener() {
+        binding.addClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                emailEditText = (EditText)getView().findViewById(R.id.input_email4);
+                emailEditText = (EditText)getView().findViewById(R.id.input_email3);
                 String email = emailEditText.getText().toString();
 
-                passwordEditText = (EditText)getView().findViewById(R.id.input_password4);
+                passwordEditText = (EditText)getView().findViewById(R.id.input_password3);
                 String password = passwordEditText.getText().toString();
 
                 if (!Helper.isValidEmail(email)) {
-                    getView().findViewById(R.id.email_error3).setVisibility(View.VISIBLE);
+                    getView().findViewById(R.id.email_error_client).setVisibility(View.VISIBLE);
                 } else {
-                    getView().findViewById(R.id.email_error3).setVisibility(View.GONE);
+                    getView().findViewById(R.id.email_error_client).setVisibility(View.GONE);
                 }
 
                 if (!Helper.isPasswordValid(password)) {
-                    getView().findViewById(R.id.password_error3).setVisibility(View.VISIBLE);
+                    getView().findViewById(R.id.password_error_client).setVisibility(View.VISIBLE);
                 } else {
-                    getView().findViewById(R.id.password_error3).setVisibility(View.GONE);
+                    getView().findViewById(R.id.password_error_client).setVisibility(View.GONE);
                 }
 
                 if (Helper.isValidEmail(email) && Helper.isPasswordValid(password)) {
                     Map<String,Object> users = new HashMap<>();
                     users.put("email", email);
                     users.put("password", password);
-                    users.put("type", "COOK");
+                    users.put("type", "CLIENT");
 
                     Bundle bundle = new Bundle();
-                    bundle.putString("user_type", "COOK");
+                    bundle.putString("user_type", "CLIENT");
 
                     fb.collection("users").add(users).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            NavHostFragment.findNavController(register_cook.this)
-                                    .navigate(R.id.action_register_cook2_to_welcome_screen, bundle);
+                            NavHostFragment.findNavController(register_client.this)
+                                    .navigate(R.id.action_register_client2_to_welcome_screen, bundle);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override

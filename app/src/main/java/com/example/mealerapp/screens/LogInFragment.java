@@ -1,4 +1,4 @@
-package com.example.mealerapp;
+package com.example.mealerapp.screens;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +11,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.mealerapp.databinding.FragmentFirstBinding;
+import com.example.mealerapp.Helper;
+import com.example.mealerapp.R;
+import com.example.mealerapp.databinding.FragmentLoginBinding;
+import com.example.mealerapp.objects.Admin;
+import com.example.mealerapp.objects.Client;
+import com.example.mealerapp.objects.Cook;
+import com.example.mealerapp.objects.Database;
+import com.example.mealerapp.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class FirstFragment extends Fragment {
+public class LogInFragment extends Fragment {
 
-    private FragmentFirstBinding binding;
+    private FragmentLoginBinding binding;
     private EditText emailEditText;
     private EditText passwordEditText;
     private Database database;
@@ -31,7 +38,7 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentFirstBinding.inflate(inflater, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
         database = new Database();
         return binding.getRoot();
     }
@@ -42,7 +49,7 @@ public class FirstFragment extends Fragment {
         binding.registerClient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
+                NavHostFragment.findNavController(LogInFragment.this)
                         .navigate(R.id.action_FirstFragment_to_register_client2);
             }
         });
@@ -50,7 +57,7 @@ public class FirstFragment extends Fragment {
         binding.registerCook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
+                NavHostFragment.findNavController(LogInFragment.this)
                         .navigate(R.id.action_FirstFragment_to_register_cook2);
             }
         });
@@ -83,7 +90,7 @@ public class FirstFragment extends Fragment {
 
                 final User[] user = new User[1];
 
-                database.firestore.collection("users").whereEqualTo("email", email).whereEqualTo("password", password).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                database.getFirestore().collection("users").whereEqualTo("email", email).whereEqualTo("password", password).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -112,13 +119,13 @@ public class FirstFragment extends Fragment {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("user_type", user[0].getType().toString());
                                         if (type == User.UserType.ADMIN) {
-                                            welcome_screen ws = new welcome_screen();
+                                            admin_screen ws = new admin_screen();
                                             ws.setArguments(bundle);
-                                            NavHostFragment.findNavController(FirstFragment.this)
+                                            NavHostFragment.findNavController(LogInFragment.this)
                                                     .navigate(R.id.action_FirstFragment_to_welcome_screen, bundle);
                                         }
                                         if (type == User.UserType.COOK) {
-                                            
+
                                         }
 
                                     }

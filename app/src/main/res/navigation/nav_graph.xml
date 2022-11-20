@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.example.mealerapp.FirstFragment"
+        android:name="com.example.mealerapp.screens.LogInFragment"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/fragment_login">
 
         <action
             android:id="@+id/action_FirstFragment_to_register_client2"
@@ -19,29 +19,29 @@
             app:destination="@id/register_cook2" />
         <action
             android:id="@+id/action_FirstFragment_to_welcome_screen"
-            app:destination="@id/welcome_screen" />
+            app:destination="@id/admin_screen" />
     </fragment>
     <fragment
         android:id="@+id/register_client2"
-        android:name="com.example.mealerapp.register_client"
+        android:name="com.example.mealerapp.screens.register_client"
         android:label="fragment_register_client"
         tools:layout="@layout/fragment_register_client" >
         <action
             android:id="@+id/action_register_client2_to_welcome_screen"
-            app:destination="@id/welcome_screen" />
+            app:destination="@id/admin_screen" />
     </fragment>
     <fragment
         android:id="@+id/register_cook2"
-        android:name="com.example.mealerapp.register_cook"
+        android:name="com.example.mealerapp.screens.register_cook"
         android:label="fragment_register_cook"
         tools:layout="@layout/fragment_register_cook" >
         <action
             android:id="@+id/action_register_cook2_to_welcome_screen"
-            app:destination="@id/welcome_screen" />
+            app:destination="@id/admin_screen" />
     </fragment>
     <fragment
-        android:id="@+id/welcome_screen"
-        android:name="com.example.mealerapp.welcome_screen"
+        android:id="@+id/admin_screen"
+        android:name="com.example.mealerapp.screens.admin_screen"
         android:label="Welcome Screen"
-        tools:layout="@layout/fragment_welcome_screen" />
+        tools:layout="@layout/fragment_admin_screen" />
 </navigation>

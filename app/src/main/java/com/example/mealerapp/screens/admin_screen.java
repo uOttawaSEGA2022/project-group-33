@@ -1,6 +1,5 @@
-package com.example.mealerapp;
+package com.example.mealerapp.screens;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.MainThread;
@@ -12,14 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.example.mealerapp.R;
+import com.example.mealerapp.objects.Complaint;
+import com.example.mealerapp.objects.Database;
+import com.example.mealerapp.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -27,17 +27,17 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link welcome_screen#newInstance} factory method to
+ * Use the {@link admin_screen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class welcome_screen extends Fragment {
+public class admin_screen extends Fragment {
 
     private User.UserType userType;
     private Database database;
     LinearLayout myLayout;
     ListView complaintList;
 
-    public welcome_screen() {
+    public admin_screen() {
         // Required empty public constructor
     }
 
@@ -50,8 +50,8 @@ public class welcome_screen extends Fragment {
      * @return A new instance of fragment welcome_screen.
      */
     // TODO: Rename and change types and number of parameters
-    public static welcome_screen newInstance(String param1, String param2) {
-        welcome_screen fragment = new welcome_screen();
+    public static admin_screen newInstance(String param1, String param2) {
+        admin_screen fragment = new admin_screen();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -70,7 +70,7 @@ public class welcome_screen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_welcome_screen, container, false);
+        return inflater.inflate(R.layout.fragment_admin_screen, container, false);
     }
 
     @MainThread
@@ -85,7 +85,7 @@ public class welcome_screen extends Fragment {
 
         ArrayList<Complaint> complaints = new ArrayList<>();
 
-        database.firestore.collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        database.getFirestore().collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

@@ -1,10 +1,10 @@
-package com.example.mealerapp;
+package com.example.mealerapp.screens;
 
 import android.os.Bundle;
 
+import com.example.mealerapp.R;
+import com.example.mealerapp.objects.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -19,14 +19,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.mealerapp.databinding.ActivityMainBinding;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 //        make new complaint
         database = new Database();
 
-        database.firestore.collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        database.getFirestore().collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 Map<String, Object> city = new HashMap<>();
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
                 city.put("date", formattedDate);
                 city.put("id", task.getResult().size());
-                database.firestore.collection("complaints").document(Integer.toString(task.getResult().size())).set(city);
+                database.getFirestore().collection("complaints").document(Integer.toString(task.getResult().size())).set(city);
             }
         });
 

@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".register_client">
+    tools:context=".screens.register_client">
 
     <TextView
         android:id="@+id/email_error_client"

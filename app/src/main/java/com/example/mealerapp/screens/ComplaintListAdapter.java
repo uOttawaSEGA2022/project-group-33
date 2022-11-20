@@ -1,35 +1,30 @@
-package com.example.mealerapp;
+package com.example.mealerapp.screens;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.mealerapp.R;
+import com.example.mealerapp.objects.Complaint;
+import com.example.mealerapp.objects.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.google.protobuf.Any;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SimpleTimeZone;
 
 public class ComplaintListAdapter extends BaseAdapter {
 
@@ -94,7 +89,7 @@ public class ComplaintListAdapter extends BaseAdapter {
         permanentSuspension.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                database.firestore.collection("users").whereEqualTo("email", toEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                database.getFirestore().collection("users").whereEqualTo("email", toEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
@@ -128,7 +123,7 @@ public class ComplaintListAdapter extends BaseAdapter {
                             c.set(datePicker.getDatePicker().getYear(), datePicker.getDatePicker().getMonth(), datePicker.getDatePicker().getDayOfMonth());
 
                             // Change temporary suspension of user
-                            database.firestore.collection("users").whereEqualTo("email", toEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            database.getFirestore().collection("users").whereEqualTo("email", toEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {

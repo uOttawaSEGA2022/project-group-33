@@ -1,4 +1,4 @@
-package com.example.mealerapp;
+package com.example.mealerapp.objects;
 import androidx.appcompat.app.AppCompatActivity;
 
 public abstract class User extends AppCompatActivity {
@@ -7,7 +7,7 @@ public abstract class User extends AppCompatActivity {
     private String password;
     private UserType type;
 
-    enum UserType {
+    public enum UserType {
         CLIENT,
         COOK,
         ADMIN

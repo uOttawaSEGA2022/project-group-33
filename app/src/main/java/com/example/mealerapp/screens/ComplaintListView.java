@@ -1,4 +1,4 @@
-package com.example.mealerapp;
+package com.example.mealerapp.screens;
 
 import android.app.Activity;
 
