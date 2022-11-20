@@ -27,17 +27,17 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link admin_screen#newInstance} factory method to
+ * Use the {@link adminWelcomeScreen#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class admin_screen extends Fragment {
+public class adminWelcomeScreen extends Fragment {
 
     private User.UserType userType;
     private Database database;
     LinearLayout myLayout;
     ListView complaintList;
 
-    public admin_screen() {
+    public adminWelcomeScreen() {
         // Required empty public constructor
     }
 
@@ -50,8 +50,8 @@ public class admin_screen extends Fragment {
      * @return A new instance of fragment welcome_screen.
      */
     // TODO: Rename and change types and number of parameters
-    public static admin_screen newInstance(String param1, String param2) {
-        admin_screen fragment = new admin_screen();
+    public static adminWelcomeScreen newInstance(String param1, String param2) {
+        adminWelcomeScreen fragment = new adminWelcomeScreen();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

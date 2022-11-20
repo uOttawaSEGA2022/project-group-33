@@ -119,7 +119,7 @@ public class LogInFragment extends Fragment {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("user_type", user[0].getType().toString());
                                         if (type == User.UserType.ADMIN) {
-                                            admin_screen ws = new admin_screen();
+                                            adminWelcomeScreen ws = new adminWelcomeScreen();
                                             ws.setArguments(bundle);
                                             NavHostFragment.findNavController(LogInFragment.this)
                                                     .navigate(R.id.action_FirstFragment_to_welcome_screen, bundle);
