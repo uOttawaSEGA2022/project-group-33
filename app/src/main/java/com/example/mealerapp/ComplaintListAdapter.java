@@ -1,14 +1,19 @@
 package com.example.mealerapp;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -19,9 +24,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.protobuf.Any;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SimpleTimeZone;
 
 public class ComplaintListAdapter extends BaseAdapter {
 
@@ -55,31 +63,33 @@ public class ComplaintListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(int complaintIndex, View view, ViewGroup viewGroup) {
         view = inlater.inflate(R.layout.content_complaint_list_view, null);
 
         TextView complaintFrom = view.findViewById(R.id.complaintFrom);
         TextView complaintTo = view.findViewById(R.id.complaintTo);
         TextView complaintMessage = view.findViewById(R.id.complaintMessage);
 
-        String toEmail = complaints.get(i).getToEmail();
+        String toEmail = complaints.get(complaintIndex).getToEmail();
 
-        complaintFrom.setText(complaints.get(i).getFromEmail());
+        complaintFrom.setText(complaints.get(complaintIndex).getFromEmail());
         complaintTo.setText(toEmail);
-        complaintMessage.setText(complaints.get(i).getMessage());
+        complaintMessage.setText(complaints.get(complaintIndex).getMessage());
 
+        // Dismiss button
         Button dismiss = view.findViewById(R.id.dismiss);
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("yo", "yo");
-                complaints.get(i).deleteFromDatabase();
-                complaints.remove(i);
+                complaints.get(complaintIndex).deleteFromDatabase();
+                complaints.remove(complaintIndex);
                 lv.invalidateViews();
+                Toast.makeText(view.getContext(), "Complaint Dismissed!", Toast.LENGTH_LONG).show();
                 return;
             }
         });
 
+        // Permanent Suspension onClick
         Button permanentSuspension = view.findViewById(R.id.permSuspension);
         permanentSuspension.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,17 +99,58 @@ public class ComplaintListAdapter extends BaseAdapter {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("yoyo", "deleting");
                                 document.getReference().update("permanentSuspension", true);
-                                complaints.get(i).deleteFromDatabase();
-                                complaints.remove(i);
+                                complaints.get(complaintIndex).deleteFromDatabase();
+                                complaints.remove(complaintIndex);
                                 lv.invalidateViews();
+                                Toast.makeText(view.getContext(), "User Permanently Suspended", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
                 });
             }
         });
+
+        // Temporary Suspension onClick
+        Button temporarySuspension = view.findViewById(R.id.tempSuspension);
+        temporarySuspension.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    DatePickerDialog datePicker = new DatePickerDialog(view.getContext());
+                    datePicker.setMessage("Choose the end date of the temporary suspension");
+
+                    datePicker.setButton("Continue", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Calendar c = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
+                            c.set(datePicker.getDatePicker().getYear(), datePicker.getDatePicker().getMonth(), datePicker.getDatePicker().getDayOfMonth());
+
+                            // Change temporary suspension of user
+                            database.firestore.collection("users").whereEqualTo("email", toEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            document.getReference().update("tempSuspension", sdf.format(c.getTime()));
+                                            complaints.get(complaintIndex).deleteFromDatabase();
+                                            complaints.remove(complaintIndex);
+                                            lv.invalidateViews();
+                                            Toast.makeText(view.getContext(), "User Temporarily Suspended", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+                    datePicker.show();
+                }
+
+            }
+        });
+
 
         return view;
     }

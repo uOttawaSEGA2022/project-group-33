@@ -1,5 +1,6 @@
 package com.example.mealerapp;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
 import androidx.annotation.MainThread;
@@ -74,17 +75,10 @@ public class welcome_screen extends Fragment {
 
     @MainThread
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        TextView tv = getView().findViewById(R.id.client_type);
-//        tv.setText(userType.toString());
         myLayout = getView().findViewById(R.id.container);
 
         complaintList = getView().findViewById(R.id.complaintListView);
-
-        if (userType == User.UserType.ADMIN) {
-            showComplaints(view, myLayout);
-        } else {
-            return;
-        }
+        showComplaints(view, myLayout);
     }
 
     public void showComplaints(@NonNull View view, LinearLayout layout) {

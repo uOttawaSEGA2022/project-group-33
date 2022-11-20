@@ -99,11 +99,9 @@ public class FirstFragment extends Fragment {
                                     getView().findViewById(R.id.invalid_login).setVisibility(View.GONE);
 
                                     if (type == User.UserType.CLIENT) {
-                                        Log.v("generate_client", "yo");
                                         user[0] = new Client(email, password, type);
                                     }
                                     if (type == User.UserType.COOK) {
-                                        Log.v("generate_cook", "hello");
                                         user[0] = new Cook(email, password, type);
                                     }
                                     if (type == User.UserType.ADMIN) {
@@ -113,10 +111,16 @@ public class FirstFragment extends Fragment {
                                     if (Helper.isValidEmail(email) && Helper.isPasswordValid(password) && user[0] != null) {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("user_type", user[0].getType().toString());
-                                        welcome_screen ws = new welcome_screen();
-                                        ws.setArguments(bundle);
-                                        NavHostFragment.findNavController(FirstFragment.this)
-                                                .navigate(R.id.action_FirstFragment_to_welcome_screen, bundle);
+                                        if (type == User.UserType.ADMIN) {
+                                            welcome_screen ws = new welcome_screen();
+                                            ws.setArguments(bundle);
+                                            NavHostFragment.findNavController(FirstFragment.this)
+                                                    .navigate(R.id.action_FirstFragment_to_welcome_screen, bundle);
+                                        }
+                                        if (type == User.UserType.COOK) {
+                                            
+                                        }
+
                                     }
                                 }
                             } else {
