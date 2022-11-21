@@ -21,8 +21,11 @@ import com.example.mealerapp.objects.Database;
 import com.example.mealerapp.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.List;
 
 public class LogInFragment extends Fragment {
 
@@ -31,13 +34,11 @@ public class LogInFragment extends Fragment {
     private EditText passwordEditText;
     private Database database;
 
-
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
-
         binding = FragmentLoginBinding.inflate(inflater, container, false);
         database = new Database();
         return binding.getRoot();
@@ -102,7 +103,6 @@ public class LogInFragment extends Fragment {
                                     if (type == null) {
                                         return;
                                     }
-
                                     getView().findViewById(R.id.invalid_login).setVisibility(View.GONE);
 
                                     if (type == User.UserType.CLIENT) {
@@ -119,6 +119,7 @@ public class LogInFragment extends Fragment {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("type", user[0].getType().toString());
                                         bundle.putString("email", user[0].getEmail());
+                                        bundle.putString("id", (String) document.get("id"));
                                         if (type == User.UserType.ADMIN) {
                                             adminWelcomeScreen ws = new adminWelcomeScreen();
                                             ws.setArguments(bundle);

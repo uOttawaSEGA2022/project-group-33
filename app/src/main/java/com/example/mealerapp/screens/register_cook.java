@@ -114,6 +114,9 @@ public class register_cook extends Fragment {
                             users.put("email", email);
                             users.put("password", password);
                             users.put("type", "COOK");
+                            users.put("id", id);
+                            users.put("permanentSuspension", false);
+                            users.put("tempSuspension", "null");
 
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "COOK");

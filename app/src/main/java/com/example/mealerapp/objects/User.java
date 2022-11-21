@@ -5,6 +5,8 @@ public abstract class User extends AppCompatActivity {
 
     private String firstName;
     private String lastName;
+    private String id;
+
     private String email;
     private String password;
     private UserType type;
@@ -51,6 +53,10 @@ public abstract class User extends AppCompatActivity {
 
     public void setType(UserType type) {
         this.type = type;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
 

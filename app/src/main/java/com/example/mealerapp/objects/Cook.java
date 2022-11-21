@@ -1,38 +1,24 @@
 package com.example.mealerapp.objects;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import android.widget.Button;
-
-import com.example.mealerapp.R;
 import com.example.mealerapp.screens.register_cook;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Date;
+import java.util.List;
 
 public class Cook extends User {
-    private register_cook binding;
     private Database database;
+    private boolean permanentSuspension;
+    private String tempSuspension;
     public Cook(String email, String password, UserType type) {
         super(email, password, type);
     }
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        //super.onViewCreated(view, savedInstanceState);
-       setContentView(R.layout.fragment_cook_welcome_screen);
-       Button addMeal = (Button) findViewById(R.id.addMeal);
-       Button addMealToOffered = (Button) findViewById(R.id.addMealOffered);
-       Button delMeal = (Button) findViewById(R.id.delMeal);
-
-       delMeal.setOnClickListener(new View.OnClickListener(){
-        public void onClick(View view){
-
-            }
-        });
-
-
-
-//        public void cookFood () {
-//            return;
-//        }
-    }
 }
 

@@ -15,9 +15,6 @@ import java.util.Map;
 public class Database {
     FirebaseFirestore firestore;
 
-    private Cook testCook = new Cook("cook@gmail.com", "cook", User.UserType.COOK);
-    private Client testClient = new Client("client@gmail", "client", User.UserType.CLIENT);
-
     public Database() {
         firestore = FirebaseFirestore.getInstance();
     }

@@ -24,8 +24,13 @@ import com.example.mealerapp.R;
 import com.example.mealerapp.objects.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +43,11 @@ public class cookWelcomeScreen extends Fragment {
 
     private Database database;
     private String cookEmail;
+    private String cookId;
+
+    private boolean permanentlySuspended;
+    private boolean tempSuspended;
+    private String endDateTempSuspension;
 
     public cookWelcomeScreen() {
         // Required empty public constructor
@@ -64,24 +74,91 @@ public class cookWelcomeScreen extends Fragment {
         super.onCreate(savedInstanceState);
         database = new Database();
         cookEmail = getArguments().getString("email");
+        cookId = getArguments().getString("id");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         return inflater.inflate(R.layout.fragment_cook_welcome_screen, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        // Add Meal Button
+        TextView permSuspensionText = getView().findViewById(R.id.permanentSuspendedText);
+        TextView tempSuspensionText = getView().findViewById(R.id.tempSuspendedText);
+        TextView unbannedOnText = getView().findViewById(R.id.willBeUnsuspendedBy);
+        TextView tempSuspensionDateText = getView().findViewById(R.id.tempSusDate);
+
         Button addMealButton = getView().findViewById(R.id.addMeal);
+        Button viewMealsButton = getView().findViewById(R.id.viewMeals);
+
         addMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getAddMealDialog().show();
+            }
+        });
+
+        permSuspensionText.setVisibility(View.GONE);
+        tempSuspensionText.setVisibility(View.GONE);
+        unbannedOnText.setVisibility(View.GONE);
+        tempSuspensionDateText.setVisibility(View.GONE);
+        permSuspensionText.setVisibility(View.GONE);
+        addMealButton.setVisibility(View.GONE);
+        viewMealsButton.setVisibility(View.GONE);
+
+        database.getFirestore().collection("users").document(cookId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.getResult().get("permanentSuspension").toString() == "true") {
+                    addMealButton.setVisibility(View.GONE);
+                    viewMealsButton.setVisibility(View.GONE);
+                    tempSuspensionText.setVisibility(View.GONE);
+                    unbannedOnText.setVisibility(View.GONE);
+                    tempSuspensionDateText.setVisibility(View.GONE);
+                    permSuspensionText.setVisibility(View.VISIBLE);
+                } else if (task.getResult().get("tempSuspension").toString() == "null") {
+                    permSuspensionText.setVisibility(View.GONE);
+                    tempSuspensionText.setVisibility(View.GONE);
+                    unbannedOnText.setVisibility(View.GONE);
+                    tempSuspensionDateText.setVisibility(View.GONE);
+
+                    addMealButton.setVisibility(View.VISIBLE);
+                    viewMealsButton.setVisibility(View.VISIBLE);
+                } else if (task.getResult().get("tempSuspension").toString() != "null") {
+                    endDateTempSuspension = task.getResult().get("tempSuspension").toString();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
+                    Date tempSuspensionDate;
+                    Date todaysDate = new Date();
+                    try {
+                        tempSuspensionDate = sdf.parse(endDateTempSuspension);
+                    } catch (ParseException e) {
+                        tempSuspensionDate = null;
+                        e.printStackTrace();
+                    }
+
+                    int todaysDateComparedToSuspensionDate = todaysDate.compareTo(tempSuspensionDate);
+                    if (todaysDateComparedToSuspensionDate < 0 || todaysDateComparedToSuspensionDate == 0) {
+                        permSuspensionText.setVisibility(View.GONE);
+                        addMealButton.setVisibility(View.GONE);
+                        viewMealsButton.setVisibility(View.GONE);
+                        tempSuspensionDateText.setText(endDateTempSuspension + " (yyyy mm dd)");
+
+                        tempSuspensionText.setVisibility(View.VISIBLE);
+                        unbannedOnText.setVisibility(View.VISIBLE);
+                        tempSuspensionDateText.setVisibility(View.VISIBLE);
+                    } else {
+                        permSuspensionText.setVisibility(View.GONE);
+                        tempSuspensionText.setVisibility(View.GONE);
+                        unbannedOnText.setVisibility(View.GONE);
+                        tempSuspensionDateText.setVisibility(View.GONE);
+
+                        addMealButton.setVisibility(View.VISIBLE);
+                        viewMealsButton.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         });
     }
