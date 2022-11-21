@@ -5,3 +5,8 @@
     <img src="MealerLogo.png" width="450">
   </a>
 </p> 
+
+## Credentials to enter the app:
+### Admin
+Email: admin@a.com
+Password: admin123
