@@ -8,7 +8,7 @@ public class Complaint {
     private String date;
     private String id;
 
-    private static Database database;
+    private Database database;
 
     public Complaint(String fromEmail, String toEmail, String message, String date, String id) {
         this.fromEmail = fromEmail;
@@ -42,6 +42,6 @@ public class Complaint {
     }
 
     public void deleteFromDatabase() {
-        database.firestore.collection("complaints").document(id).delete();
+        database.getFirestore().collection("complaints").document(id).delete();
     }
 }

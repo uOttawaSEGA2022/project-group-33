@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
-    tools:context=".screens.adminWelcomeScreen"
-    android:orientation="horizontal">
+    tools:context=".screens.cookListMeals">
+
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/complaintListView"
+        android:id="@+id/mealsListView"
         />
 
 </LinearLayout>

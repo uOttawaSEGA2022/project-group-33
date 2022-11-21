@@ -49,5 +49,14 @@
         tools:layout="@layout/fragment_admin_screen" />
     <fragment
         android:id="@+id/cookWelcomeScreen"
-        android:name="com.example.mealerapp.screens.cookWelcomeScreen" />
+        android:name="com.example.mealerapp.screens.cookWelcomeScreen" >
+        <action
+            android:id="@+id/cookWelcome_to_listOfMeals"
+            app:destination="@id/cookListMeals" />
+    </fragment>
+    <fragment
+        android:id="@+id/cookListMeals"
+        android:name="com.example.mealerapp.screens.cookListMeals"
+        android:label="fragment_cook_list_meals"
+        tools:layout="@layout/fragment_cook_list_meals" />
 </navigation>

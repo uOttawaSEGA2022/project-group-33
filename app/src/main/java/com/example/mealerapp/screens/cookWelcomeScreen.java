@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,6 +50,8 @@ public class cookWelcomeScreen extends Fragment {
     private boolean tempSuspended;
     private String endDateTempSuspension;
 
+    private int mealsAddedThisSession;
+
     public cookWelcomeScreen() {
         // Required empty public constructor
     }
@@ -73,6 +76,7 @@ public class cookWelcomeScreen extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new Database();
+        mealsAddedThisSession = 0;
         cookEmail = getArguments().getString("email");
         cookId = getArguments().getString("id");
     }
@@ -98,6 +102,18 @@ public class cookWelcomeScreen extends Fragment {
             @Override
             public void onClick(View view) {
                 getAddMealDialog().show();
+            }
+        });
+
+        viewMealsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("email", cookEmail);
+                bundle.putString("id", cookId);
+
+                NavHostFragment.findNavController(cookWelcomeScreen.this)
+                        .navigate(R.id.cookWelcome_to_listOfMeals, bundle);
             }
         });
 
@@ -205,6 +221,15 @@ public class cookWelcomeScreen extends Fragment {
         mealPriceInput.setPadding(40,0,0,0);
         layout.addView(mealPriceInput);
 
+        TextView addToOfferedListText = new TextView(getContext());
+        addToOfferedListText.setText("Add to Offered Meal List");
+        addToOfferedListText.setPadding(40, 40, 0 , 10);
+        layout.addView(addToOfferedListText);
+
+        CheckBox addToOfferedList = new CheckBox(getContext());
+        addToOfferedList.setPadding(40, 40, 0 , 10);
+        layout.addView(addToOfferedList);
+
         dialog.setView(layout);
 
         dialog.setPositiveButton("Add Meal", new DialogInterface.OnClickListener() {
@@ -219,12 +244,14 @@ public class cookWelcomeScreen extends Fragment {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                             Map<String,Object> meal = new HashMap<>();
-                            String id = Integer.toString(task.getResult().size());
+                            mealsAddedThisSession++;
+                            String id = Integer.toString(task.getResult().size() + mealsAddedThisSession);
                             meal.put("mealName", mealTitleInput.getText().toString());
                             meal.put("mealDescription", mealDescriptionInput.getText().toString());
                             meal.put("price", mealPriceInput.getText().toString());
                             meal.put("id", id);
                             meal.put("fromEmail", cookEmail);
+                            meal.put("onOfferedList", addToOfferedList.isChecked());
 
                             database.getFirestore().collection("meals").document(id).set(meal);
                             Toast.makeText(getView().getContext(), "Successfully added the meal!", Toast.LENGTH_LONG).show();

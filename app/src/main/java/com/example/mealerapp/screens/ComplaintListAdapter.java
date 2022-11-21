@@ -61,9 +61,9 @@ public class ComplaintListAdapter extends BaseAdapter {
     public View getView(int complaintIndex, View view, ViewGroup viewGroup) {
         view = inlater.inflate(R.layout.content_complaint_list_view, null);
 
-        TextView complaintFrom = view.findViewById(R.id.complaintFrom);
-        TextView complaintTo = view.findViewById(R.id.complaintTo);
-        TextView complaintMessage = view.findViewById(R.id.complaintMessage);
+        TextView complaintFrom = view.findViewById(R.id.mealTitle);
+        TextView complaintTo = view.findViewById(R.id.mealPrice);
+        TextView complaintMessage = view.findViewById(R.id.mealDescription);
 
         String toEmail = complaints.get(complaintIndex).getToEmail();
 
@@ -72,7 +72,7 @@ public class ComplaintListAdapter extends BaseAdapter {
         complaintMessage.setText(complaints.get(complaintIndex).getMessage());
 
         // Dismiss button
-        Button dismiss = view.findViewById(R.id.dismiss);
+        Button dismiss = view.findViewById(R.id.deleteMeal);
         dismiss.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +107,7 @@ public class ComplaintListAdapter extends BaseAdapter {
         });
 
         // Temporary Suspension onClick
-        Button temporarySuspension = view.findViewById(R.id.tempSuspension);
+        Button temporarySuspension = view.findViewById(R.id.addRemoveOffered);
         temporarySuspension.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
