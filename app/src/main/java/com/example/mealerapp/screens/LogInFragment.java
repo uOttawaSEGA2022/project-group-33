@@ -105,14 +105,14 @@ public class LogInFragment extends Fragment {
                                     }
                                     getView().findViewById(R.id.invalid_login).setVisibility(View.GONE);
 
-                                    if (type == User.UserType.CLIENT) {
-                                        user[0] = new Client(email, password, type);
+                                    if (type == User.UserType.COOK) {
+                                        user[0] = new Client(email, password);
                                     }
                                     if (type == User.UserType.COOK) {
-                                        user[0] = new Cook(email, password, type);
+                                        user[0] = new Cook(email, password);
                                     }
                                     if (type == User.UserType.ADMIN) {
-                                        user[0] = new Admin(email, password, type);
+                                        user[0] = new Admin(email, password);
                                     }
 
                                     if (Helper.isValidEmail(email) && Helper.isPasswordValid(password) && user[0] != null) {

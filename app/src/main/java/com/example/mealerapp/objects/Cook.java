@@ -16,8 +16,8 @@ public class Cook extends User {
     private Database database;
     private boolean permanentSuspension;
     private String tempSuspension;
-    public Cook(String email, String password, UserType type) {
-        super(email, password, type);
+    public Cook(String email, String password) {
+        super(email, password, UserType.COOK);
     }
 
 }
