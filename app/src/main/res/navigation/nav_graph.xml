@@ -23,6 +23,9 @@
         <action
             android:id="@+id/login_to_cookWelcomeScreen"
             app:destination="@id/cookWelcomeScreen" />
+        <action
+            android:id="@+id/login_to_clientWelcome"
+            app:destination="@id/clientFragmentWelcomeScreen" />
     </fragment>
     <fragment
         android:id="@+id/register_client2"
@@ -30,8 +33,8 @@
         android:label="fragment_register_client"
         tools:layout="@layout/fragment_register_client" >
         <action
-            android:id="@+id/action_register_client2_to_welcome_screen"
-            app:destination="@id/admin_screen" />
+            android:id="@+id/registerClient_to_clientWelcome"
+            app:destination="@id/clientFragmentWelcomeScreen" />
     </fragment>
     <fragment
         android:id="@+id/register_cook2"
@@ -59,4 +62,9 @@
         android:name="com.example.mealerapp.screens.cookListMeals"
         android:label="fragment_cook_list_meals"
         tools:layout="@layout/fragment_cook_list_meals" />
+    <fragment
+        android:id="@+id/clientFragmentWelcomeScreen"
+        android:name="com.example.mealerapp.screens.ClientFragmentWelcomeScreen"
+        android:label="fragment_client_welcome_screen"
+        tools:layout="@layout/fragment_client_welcome_screen" />
 </navigation>

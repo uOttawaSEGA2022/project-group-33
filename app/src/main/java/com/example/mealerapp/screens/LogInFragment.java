@@ -105,7 +105,7 @@ public class LogInFragment extends Fragment {
                                     }
                                     getView().findViewById(R.id.invalid_login).setVisibility(View.GONE);
 
-                                    if (type == User.UserType.COOK) {
+                                    if (type == User.UserType.CLIENT) {
                                         user[0] = new Client(email, password);
                                     }
                                     if (type == User.UserType.COOK) {
@@ -130,6 +130,10 @@ public class LogInFragment extends Fragment {
                                             cookScreen.setArguments(bundle);
                                             NavHostFragment.findNavController(LogInFragment.this)
                                                     .navigate(R.id.login_to_cookWelcomeScreen, bundle);
+                                        } else if (type == User.UserType.CLIENT) {
+                                            ClientFragmentWelcomeScreen clientScreen = new ClientFragmentWelcomeScreen();
+                                            clientScreen.setArguments(bundle);
+                                            NavHostFragment.findNavController(LogInFragment.this).navigate(R.id.login_to_clientWelcome);
                                         }
 
                                     }

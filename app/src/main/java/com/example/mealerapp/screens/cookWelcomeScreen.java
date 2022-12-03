@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,8 +93,8 @@ public class cookWelcomeScreen extends Fragment {
         TextView unbannedOnText = getView().findViewById(R.id.willBeUnsuspendedBy);
         TextView tempSuspensionDateText = getView().findViewById(R.id.tempSusDate);
 
-        Button addMealButton = getView().findViewById(R.id.addMeal);
-        Button viewMealsButton = getView().findViewById(R.id.viewMeals);
+        Button addMealButton = getView().findViewById(R.id.findMeal);
+        Button viewMealsButton = getView().findViewById(R.id.purchaseRequest);
 
         addMealButton.setOnClickListener(new View.OnClickListener() {
             @Override

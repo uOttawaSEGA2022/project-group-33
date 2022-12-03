@@ -139,7 +139,7 @@ public class register_client extends Fragment {
                             database.getFirestore().collection("users").document(id).set(users);
 
                             NavHostFragment.findNavController(register_client.this)
-                                    .navigate(R.id.action_register_client2_to_welcome_screen, bundle);
+                                    .navigate(R.id.registerClient_to_clientWelcome, bundle);
                         }
                     });
 
