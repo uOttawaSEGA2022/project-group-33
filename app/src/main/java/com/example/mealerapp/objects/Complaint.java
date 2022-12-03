@@ -7,7 +7,7 @@ public class Complaint {
     private String message;
     private String date;
     private String id;
-
+ 
     private Database database;
 
     public Complaint(String fromEmail, String toEmail, String message, String date, String id) {
