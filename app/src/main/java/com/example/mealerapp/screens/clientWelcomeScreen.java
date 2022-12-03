@@ -71,10 +71,10 @@ public class clientWelcomeScreen extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "fill this in");
+                bundle.putString("clientEmail", clientEmail);
                 clientPurchaseRequestsScreen requestsScreen = new clientPurchaseRequestsScreen();
                 requestsScreen.setArguments(bundle);
-                NavHostFragment.findNavController(clientWelcomeScreen.this).navigate(R.id.clientWelcome_to_purchaseRequest);
+                NavHostFragment.findNavController(clientWelcomeScreen.this).navigate(R.id.clientWelcome_to_purchaseRequest, bundle);
             }
         });
     }

@@ -2,13 +2,24 @@ package com.example.mealerapp.screens;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.mealerapp.R;
+import com.example.mealerapp.objects.Database;
+import com.example.mealerapp.objects.OrderRequest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +27,12 @@ import com.example.mealerapp.R;
  * create an instance of this fragment.
  */
 public class clientPurchaseRequestsScreen extends Fragment {
+
+    ListView clientRequestsListView;
+    ArrayList<OrderRequest> orders;
+    clientRequestsAdapter requestsAdapter;
+    Database database;
+    String clientEmail;
 
     public clientPurchaseRequestsScreen() {
         // Required empty public constructor
@@ -32,6 +49,9 @@ public class clientPurchaseRequestsScreen extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = new Database();
+        orders = new ArrayList<>();
+        clientEmail = getArguments().getString("clientEmail");
     }
 
     @Override
@@ -39,5 +59,39 @@ public class clientPurchaseRequestsScreen extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_client_purchase_requests, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        clientRequestsListView = getView().findViewById(R.id.clientPurchaseRequestList);
+
+        database.getFirestore().collection("orders").whereEqualTo("clientEmail", clientEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    if (!task.getResult().isEmpty()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String clientEmail = document.get("clientEmail").toString();
+                            String cookEmail = document.get("cookEmail").toString();
+                            String id = document.get("id").toString();
+                            String mealTitle = document.get("mealTitle").toString();
+                            Float price = Float.parseFloat(document.get("price").toString());
+                            String status = document.get("status").toString();
+
+                            OrderRequest order = new OrderRequest(cookEmail, clientEmail, id, mealTitle, price, status);
+
+                            orders.add(order);
+
+                        }
+
+                        requestsAdapter = new clientRequestsAdapter(getView().getContext(), orders, clientRequestsListView);
+                        clientRequestsListView.setAdapter(requestsAdapter);
+                    }
+                }
+            }
+        });
+
     }
 }

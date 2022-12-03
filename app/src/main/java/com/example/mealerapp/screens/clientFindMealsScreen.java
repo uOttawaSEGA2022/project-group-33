@@ -87,54 +87,55 @@ public class clientFindMealsScreen extends Fragment {
                     if (!MealTask.getResult().isEmpty()) {
                         for (QueryDocumentSnapshot MealDocument : MealTask.getResult()) {
                             String fromEmail = MealDocument.get("fromEmail").toString();
+                            Boolean isOnOfferedList = Boolean.parseBoolean(MealDocument.get("onOfferedList").toString());
 
-                            //do another query to see if the cook is banned or not
-                            database.getFirestore().collection("users").whereEqualTo("email", fromEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> UserTask) {
-                                    if (UserTask.isSuccessful()) {
-                                        if (!UserTask.getResult().isEmpty()) {
-                                            for (QueryDocumentSnapshot UserDocument : UserTask.getResult()) {
-                                                boolean permanentSuspension = Boolean.parseBoolean(UserDocument.get("permanentSuspension").toString());
+                            if (isOnOfferedList == true) {
+                                //do another query to see if the cook is banned or not
+                                database.getFirestore().collection("users").whereEqualTo("email", fromEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> UserTask) {
+                                        if (UserTask.isSuccessful()) {
+                                            if (!UserTask.getResult().isEmpty()) {
+                                                for (QueryDocumentSnapshot UserDocument : UserTask.getResult()) {
+                                                    boolean permanentSuspension = Boolean.parseBoolean(UserDocument.get("permanentSuspension").toString());
 
-                                                if (permanentSuspension == true) {
-                                                    return;
+                                                    if (permanentSuspension == true) {
+                                                        return;
+                                                    }
+
+                                                    String endDateTempSuspension = UserDocument.get("tempSuspension").toString();
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
+                                                    Date tempSuspensionDate;
+                                                    Date todaysDate = new Date();
+                                                    try {
+                                                        tempSuspensionDate = sdf.parse(endDateTempSuspension);
+                                                    } catch (ParseException e) {
+                                                        tempSuspensionDate = null;
+                                                        e.printStackTrace();
+                                                    }
+
+                                                    int todaysDateComparedToSuspensionDate = todaysDate.compareTo(tempSuspensionDate);
+                                                    if (todaysDateComparedToSuspensionDate < 0 || todaysDateComparedToSuspensionDate == 0) {
+                                                        // user is suspended
+                                                    } else {
+                                                        // user is not suspended
+                                                        String id = MealDocument.get("id").toString();
+                                                        String mealDescription = MealDocument.get("mealDescription").toString();
+                                                        String mealName = MealDocument.get("mealName").toString();
+                                                        boolean onOfferedList = (boolean) MealDocument.get("onOfferedList");
+                                                        float price = Float.parseFloat(MealDocument.get("price").toString());
+                                                        Meal c = new Meal(mealName, fromEmail, mealDescription, onOfferedList, price, id);
+                                                        meals.add(c);
+                                                    }
                                                 }
 
-                                                String endDateTempSuspension = UserDocument.get("tempSuspension").toString();
-                                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
-                                                Date tempSuspensionDate;
-                                                Date todaysDate = new Date();
-                                                try {
-                                                    tempSuspensionDate = sdf.parse(endDateTempSuspension);
-                                                } catch (ParseException e) {
-                                                    tempSuspensionDate = null;
-                                                    e.printStackTrace();
-                                                }
-
-                                                int todaysDateComparedToSuspensionDate = todaysDate.compareTo(tempSuspensionDate);
-                                                if (todaysDateComparedToSuspensionDate < 0 || todaysDateComparedToSuspensionDate == 0) {
-                                                    // user is suspended
-                                                } else {
-                                                    // user is not suspended
-                                                    String id = MealDocument.get("id").toString();
-                                                    String mealDescription = MealDocument.get("mealDescription").toString();
-                                                    String mealName = MealDocument.get("mealName").toString();
-                                                    boolean onOfferedList = (boolean) MealDocument.get("onOfferedList");
-                                                    float price = Float.parseFloat(MealDocument.get("price").toString());
-                                                    Meal c = new Meal(mealName, fromEmail, mealDescription, onOfferedList, price, id);
-                                                    meals.add(c);
-
-                                                }
+                                                mealListAdapter = new clientMealListAdapter(getView().getContext(), meals, mealsListView, clientEmail);
+                                                mealsListView.setAdapter(mealListAdapter);
                                             }
-
-                                            mealListAdapter = new clientMealListAdapter(getView().getContext(), meals, mealsListView, clientEmail);
-                                            mealsListView.setAdapter(mealListAdapter);
                                         }
                                     }
-                                }
-                            });
-
+                                });
+                            }
                         }
 
 
@@ -143,8 +144,6 @@ public class clientFindMealsScreen extends Fragment {
                 }
             }
         });
-
-
 
         // Inflate the layout for this fragment
         MenuHost menuHost = requireActivity();
