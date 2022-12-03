@@ -76,7 +76,7 @@
     </fragment>
     <fragment
         android:id="@+id/findMeals"
-        android:name="com.example.mealerapp.screens.findMealsScreen"
+        android:name="com.example.mealerapp.screens.clientFindMealsScreen"
         android:label="fragment_find_meals"
         tools:layout="@layout/fragment_find_meals" />
     <fragment

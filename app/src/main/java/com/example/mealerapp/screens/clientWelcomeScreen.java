@@ -56,7 +56,7 @@ public class clientWelcomeScreen extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "fill this in");
-                findMealsScreen findMeals = new findMealsScreen();
+                clientFindMealsScreen findMeals = new clientFindMealsScreen();
                 findMeals.setArguments(bundle);
                 NavHostFragment.findNavController(clientWelcomeScreen.this).navigate(R.id.clientWelcome_to_findMeal);
             }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,20 +15,21 @@ import com.example.mealerapp.objects.Database;
 import com.example.mealerapp.objects.Meal;
 import java.util.ArrayList;
 
-public class MealListAdapter extends BaseAdapter {
+public class MealListAdapter extends ArrayAdapter {
 
     Context context;
     ArrayList<Meal> meals;
-    LayoutInflater inlater;
+    LayoutInflater inflater;
     ListView lv;
     Database database;
 
     public MealListAdapter(Context ctx, ArrayList<Meal> meals, ListView lv) {
+        super(ctx, R.layout.meal_list_item, meals);
         this.context = ctx;
         this.meals = meals;
         this.lv = lv;
         database = new Database();
-        inlater = LayoutInflater.from(ctx);
+        inflater = LayoutInflater.from(ctx);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class MealListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int mealIndex, View view, ViewGroup viewGroup) {
-        view = inlater.inflate(R.layout.meal_list_item, null);
+        view = inflater.inflate(R.layout.meal_list_item, null);
 
         Meal thisMeal = meals.get(mealIndex);
 
