@@ -15,7 +15,7 @@
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Meal Title"
-        app:layout_constraintEnd_toStartOf="@+id/mealTitle"
+        app:layout_constraintEnd_toStartOf="@+id/clientMealTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></TextView>
 

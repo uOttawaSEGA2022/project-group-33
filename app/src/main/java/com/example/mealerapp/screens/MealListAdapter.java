@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import com.example.mealerapp.objects.Database;
 import com.example.mealerapp.objects.Meal;
 import java.util.ArrayList;
 
-public class MealListAdapter extends ArrayAdapter {
+public class MealListAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<Meal> meals;
@@ -24,7 +25,6 @@ public class MealListAdapter extends ArrayAdapter {
     Database database;
 
     public MealListAdapter(Context ctx, ArrayList<Meal> meals, ListView lv) {
-        super(ctx, R.layout.meal_list_item, meals);
         this.context = ctx;
         this.meals = meals;
         this.lv = lv;

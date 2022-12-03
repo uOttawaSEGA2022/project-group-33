@@ -40,7 +40,7 @@ public class clientFindMealsScreen extends Fragment {
 
     ListView mealsListView;
     ArrayList<Meal> meals;
-    MealListAdapter mealListAdapter;
+    clientMealListAdapter mealListAdapter;
     Database database;
 
     public clientFindMealsScreen() {
@@ -127,6 +127,9 @@ public class clientFindMealsScreen extends Fragment {
 
                                                 }
                                             }
+
+                                            mealListAdapter = new clientMealListAdapter(getView().getContext(), meals, mealsListView);
+                                            mealsListView.setAdapter(mealListAdapter);
                                         }
                                     }
                                 }
@@ -134,8 +137,7 @@ public class clientFindMealsScreen extends Fragment {
 
                         }
 
-                        mealListAdapter = new MealListAdapter(getView().getContext(), meals, mealsListView);
-                        mealsListView.setAdapter(mealListAdapter);
+
 
                     }
                 }
