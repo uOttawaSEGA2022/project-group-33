@@ -21,11 +21,8 @@ import com.example.mealerapp.objects.Database;
 import com.example.mealerapp.objects.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.List;
 
 public class LogInFragment extends Fragment {
 
@@ -131,7 +128,7 @@ public class LogInFragment extends Fragment {
                                             NavHostFragment.findNavController(LogInFragment.this)
                                                     .navigate(R.id.login_to_cookWelcomeScreen, bundle);
                                         } else if (type == User.UserType.CLIENT) {
-                                            ClientFragmentWelcomeScreen clientScreen = new ClientFragmentWelcomeScreen();
+                                            clientWelcomeScreen clientScreen = new clientWelcomeScreen();
                                             clientScreen.setArguments(bundle);
                                             NavHostFragment.findNavController(LogInFragment.this).navigate(R.id.login_to_clientWelcome);
                                         }

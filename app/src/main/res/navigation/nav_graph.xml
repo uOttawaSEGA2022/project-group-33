@@ -64,7 +64,24 @@
         tools:layout="@layout/fragment_cook_list_meals" />
     <fragment
         android:id="@+id/clientFragmentWelcomeScreen"
-        android:name="com.example.mealerapp.screens.ClientFragmentWelcomeScreen"
+        android:name="com.example.mealerapp.screens.clientWelcomeScreen"
         android:label="fragment_client_welcome_screen"
-        tools:layout="@layout/fragment_client_welcome_screen" />
+        tools:layout="@layout/fragment_client_welcome_screen" >
+        <action
+            android:id="@+id/clientWelcome_to_findMeal"
+            app:destination="@id/findMeals" />
+        <action
+            android:id="@+id/clientWelcome_to_purchaseRequest"
+            app:destination="@id/clientPurchaseRequestsScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/findMeals"
+        android:name="com.example.mealerapp.screens.findMealsScreen"
+        android:label="fragment_find_meals"
+        tools:layout="@layout/fragment_find_meals" />
+    <fragment
+        android:id="@+id/clientPurchaseRequestsScreen"
+        android:name="com.example.mealerapp.screens.clientPurchaseRequestsScreen"
+        android:label="fragment_client_purchase_requests"
+        tools:layout="@layout/fragment_client_purchase_requests" />
 </navigation>
