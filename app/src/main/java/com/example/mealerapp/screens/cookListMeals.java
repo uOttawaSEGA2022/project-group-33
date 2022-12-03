@@ -36,6 +36,7 @@ public class cookListMeals extends Fragment {
     private Database database;
     LinearLayout myLayout;
     ListView mealList;
+    String fromEmail;
 
     public cookListMeals() {
         // Required empty public constructor

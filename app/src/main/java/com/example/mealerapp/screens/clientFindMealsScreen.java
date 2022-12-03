@@ -42,6 +42,7 @@ public class clientFindMealsScreen extends Fragment {
     ArrayList<Meal> meals;
     clientMealListAdapter mealListAdapter;
     Database database;
+    String clientEmail;
 
     public clientFindMealsScreen() {
         // Required empty public constructor
@@ -60,8 +61,7 @@ public class clientFindMealsScreen extends Fragment {
         super.onCreate(savedInstanceState);
         database = new Database();
         meals = new ArrayList<>();
-
-
+        clientEmail = getArguments().getString("clientEmail");
     }
 
     @Override
@@ -128,7 +128,7 @@ public class clientFindMealsScreen extends Fragment {
                                                 }
                                             }
 
-                                            mealListAdapter = new clientMealListAdapter(getView().getContext(), meals, mealsListView);
+                                            mealListAdapter = new clientMealListAdapter(getView().getContext(), meals, mealsListView, clientEmail);
                                             mealsListView.setAdapter(mealListAdapter);
                                         }
                                     }

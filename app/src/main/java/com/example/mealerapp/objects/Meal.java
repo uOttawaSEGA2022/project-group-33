@@ -3,7 +3,7 @@ package com.example.mealerapp.objects;
 public class Meal {
 
     private String mealName;
-    private String from;
+    private String fromEmail;
     private String mealDescription;
     private boolean isOnOfferedMealList;
     private float price;
@@ -16,13 +16,17 @@ public class Meal {
 
     public Meal(String mealName, String from, String mealDescription, boolean isOnOfferedMealList, float price, String id) {
         this.mealName = mealName;
-        this.from = from;
+        this.fromEmail = from;
         this.mealDescription = mealDescription;
         this.isOnOfferedMealList = isOnOfferedMealList;
         this.price = price;
         this.id = id;
         database = new Database();
 
+    }
+
+    public String getFromEmail() {
+        return fromEmail;
     }
 
     public boolean isOnOfferedMealList() {

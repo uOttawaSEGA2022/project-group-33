@@ -115,7 +115,7 @@ public class LogInFragment extends Fragment {
                                     if (Helper.isValidEmail(email) && Helper.isPasswordValid(password) && user[0] != null) {
                                         Bundle bundle = new Bundle();
                                         bundle.putString("type", user[0].getType().toString());
-                                        bundle.putString("email", user[0].getEmail());
+                                        bundle.putString("email", email);
                                         bundle.putString("id", (String) document.get("id"));
                                         if (type == User.UserType.ADMIN) {
                                             adminWelcomeScreen ws = new adminWelcomeScreen();
@@ -130,7 +130,7 @@ public class LogInFragment extends Fragment {
                                         } else if (type == User.UserType.CLIENT) {
                                             clientWelcomeScreen clientScreen = new clientWelcomeScreen();
                                             clientScreen.setArguments(bundle);
-                                            NavHostFragment.findNavController(LogInFragment.this).navigate(R.id.login_to_clientWelcome);
+                                            NavHostFragment.findNavController(LogInFragment.this).navigate(R.id.login_to_clientWelcome, bundle);
                                         }
 
                                     }

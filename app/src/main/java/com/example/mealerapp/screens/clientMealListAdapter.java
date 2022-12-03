@@ -12,23 +12,31 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.mealerapp.R;
 import com.example.mealerapp.objects.Database;
 import com.example.mealerapp.objects.Meal;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class clientMealListAdapter extends ArrayAdapter {
 
     Context context;
+    String clientEmail;
     ArrayList<Meal> originalMeals;
     ArrayList<Meal> meals;
     LayoutInflater inlater;
     ListView lv;
     Database database;
 
-    public clientMealListAdapter(Context ctx, ArrayList<Meal> meals, ListView lv) {
+    public clientMealListAdapter(Context ctx, ArrayList<Meal> meals, ListView lv, String clientEmail) {
         super(ctx, R.layout.client_meal_list_item, meals);
         this.context = ctx;
         this.meals = meals;
@@ -36,6 +44,7 @@ public class clientMealListAdapter extends ArrayAdapter {
         this.lv = lv;
         database = new Database();
         inlater = LayoutInflater.from(ctx);
+        this.clientEmail = clientEmail;
     }
 
     @Override
@@ -69,6 +78,29 @@ public class clientMealListAdapter extends ArrayAdapter {
         Button placeOrderButton = view.findViewById(R.id.placeOrder);
         Button viewChefProfileButton = view.findViewById(R.id.clientViewProfile);
 
+        placeOrderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UUID uuid= UUID.randomUUID();
+
+                Map<String, Object> placeOrder = new HashMap<>();
+                placeOrder.put("id", uuid.toString());
+                placeOrder.put("cookEmail", meals.get(mealIndex).getFromEmail());
+                placeOrder.put("clientEmail", clientEmail);
+                placeOrder.put("mealTitle", thisMeal.getMealName());
+                placeOrder.put("price", thisMeal.getPrice());
+                placeOrder.put("status", "pending");
+
+                database.getFirestore().collection("orders").document(uuid.toString()).set(placeOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(view.getContext(), "Placed Order!", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+
+
         return view;
     }
 
@@ -89,12 +121,6 @@ public class clientMealListAdapter extends ArrayAdapter {
                 FilterResults results = new FilterResults();        // Holds the results of a filtering operation in values
                 List<Meal> FilteredArrList = new ArrayList<Meal>();
 
-                /********
-                 *
-                 *  If constraint(CharSequence that is received) is null returns the mOriginalValues(Original) values
-                 *  else does the Filtering and returns FilteredArrList(Filtered)
-                 *
-                 ********/
                 if (constraint == null || constraint.length() == 0) {
 
                     // set the Original result to return

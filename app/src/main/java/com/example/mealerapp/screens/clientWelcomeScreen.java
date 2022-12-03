@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.mealerapp.R;
+import com.example.mealerapp.objects.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,6 +21,9 @@ import com.example.mealerapp.R;
  * create an instance of this fragment.
  */
 public class clientWelcomeScreen extends Fragment {
+
+    String clientEmail;
+
     public clientWelcomeScreen() {
         // Required empty public constructor
     }
@@ -35,6 +39,7 @@ public class clientWelcomeScreen extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        clientEmail = getArguments().getString("email");
     }
 
     @Override
@@ -55,10 +60,10 @@ public class clientWelcomeScreen extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "fill this in");
+                bundle.putString("clientEmail", clientEmail);
                 clientFindMealsScreen findMeals = new clientFindMealsScreen();
                 findMeals.setArguments(bundle);
-                NavHostFragment.findNavController(clientWelcomeScreen.this).navigate(R.id.clientWelcome_to_findMeal);
+                NavHostFragment.findNavController(clientWelcomeScreen.this).navigate(R.id.clientWelcome_to_findMeal, bundle);
             }
         });
 
