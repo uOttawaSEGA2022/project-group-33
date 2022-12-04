@@ -3,11 +3,15 @@ package com.example.mealerapp.screens;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +27,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class clientRequestsAdapter extends BaseAdapter {
 
@@ -75,6 +82,54 @@ public class clientRequestsAdapter extends BaseAdapter {
 
         Button reviewChef = view.findViewById(R.id.clientReviewChef);
         Button deleteRequest = view.findViewById(R.id.clientDeleteRequest);
+        Button submitComplaintButton = view.findViewById(R.id.clientSubmitComplaint);
+
+        submitComplaintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+                dialog.setMessage("Submit Complaint");
+
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+
+                TextView complaintTitle = new TextView(context);
+                complaintTitle.setText("Complaint Message");
+                complaintTitle.setPadding(40, 10, 0 , 10);
+                layout.addView(complaintTitle);
+
+                EditText complaintInput = new EditText(context);
+                complaintInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                complaintInput.setHint("Enter complaint...");
+                complaintInput.setPadding(40,0,0,0);
+                layout.addView(complaintInput);
+
+                dialog.setView(layout);
+
+                dialog.setPositiveButton("Submit Complaint", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        Map<String,Object> complaint = new HashMap<>();
+                        UUID uuid = UUID.randomUUID();
+                        String id = uuid.toString();
+
+                        complaint.put("from", thisOrder.getClientEmail());
+                        complaint.put("to", thisOrder.getCookEmail());
+                        complaint.put("message", complaintInput.getText().toString());
+                        complaint.put("id", id);
+
+                        database.getFirestore().collection("complaints").document(id).set(complaint);
+                        thisOrder.setSubmittedComplaint(true);
+                        submitComplaintButton.setVisibility(View.GONE);
+                        Toast.makeText(view.getContext(), "Successfully submitted Complaint!", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+                dialog.show();
+            }
+        });
 
         reviewChef.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +204,12 @@ public class clientRequestsAdapter extends BaseAdapter {
             }
         });
 
+        if (thisOrder.getSubmittedComplaint() == true) {
+            submitComplaintButton.setVisibility(View.GONE);
+        } else {
+            submitComplaintButton.setVisibility(View.VISIBLE);
+        }
+
         if (thisOrder.getReviewed() == true) {
             reviewChef.setVisibility(View.GONE);
         } else {
@@ -161,6 +222,7 @@ public class clientRequestsAdapter extends BaseAdapter {
             deleteRequest.setVisibility(View.VISIBLE);
         } else {
             reviewChef.setVisibility(View.GONE);
+            submitComplaintButton.setVisibility(View.GONE);
         }
 
         return view;

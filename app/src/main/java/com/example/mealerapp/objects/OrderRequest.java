@@ -11,13 +11,15 @@ public class OrderRequest {
     private Boolean deletedFromClient;
     private Boolean deletedFromCook;
     private Boolean isReviewed;
+    private Boolean submittedComplaint;
     Database database;
+
 
     public String getId() {
         return id;
     }
 
-    public OrderRequest(String cookEmail, String clientEmail, String id, String mealTitle, float price, String status, Boolean deletedFromClient, Boolean deletedFromCook, Boolean isReviewed) {
+    public OrderRequest(String cookEmail, String clientEmail, String id, String mealTitle, float price, String status, Boolean deletedFromClient, Boolean deletedFromCook, Boolean isReviewed, Boolean submittedComplaint) {
         this.cookEmail = cookEmail;
         this.clientEmail = clientEmail;
         this.id = id;
@@ -27,7 +29,17 @@ public class OrderRequest {
         this.deletedFromClient = deletedFromClient;
         this.deletedFromCook = deletedFromCook;
         this.isReviewed = isReviewed;
+        this.submittedComplaint = submittedComplaint;
         database = new Database();
+    }
+
+
+    public Boolean getSubmittedComplaint() {
+        return submittedComplaint;
+    }
+
+    public void setSubmittedComplaint(Boolean submittedComplaint) {
+        this.submittedComplaint = submittedComplaint;
     }
 
     public Boolean getReviewed() {

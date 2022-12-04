@@ -99,6 +99,7 @@ public class clientMealListAdapter extends ArrayAdapter {
                 placeOrder.put("deletedFromCook", false);
                 placeOrder.put("deletedFromClient", false);
                 placeOrder.put("isReviewed", false);
+                placeOrder.put("submittedComplaint", false);
 
                 database.getFirestore().collection("orders").document(uuid.toString()).set(placeOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

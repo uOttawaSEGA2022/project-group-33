@@ -93,12 +93,11 @@ public class adminWelcomeScreen extends Fragment {
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String message = document.get("message").toString();
-                            String date = document.get("date").toString();
                             String from = document.get("from").toString();
                             String to = document.get("to").toString();
                             String id = document.get("id").toString();
 
-                            Complaint c = new Complaint(from, to, message, date, id);
+                            Complaint c = new Complaint(from, to, message, id);
                             complaints.add(c);
                         }
 

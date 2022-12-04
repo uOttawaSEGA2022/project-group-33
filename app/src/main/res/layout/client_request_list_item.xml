@@ -70,9 +70,22 @@
         android:layout_marginTop="16dp"
         android:text="Review Chef"
         android:textSize="10sp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pr3" />
+
+    <Button
+        android:id="@+id/clientSubmitComplaint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#E91E63"
+        android:text="Submit Complaint"
+        android:textSize="10sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clientReviewChef" />
 
     <Button
         android:id="@+id/clientDeleteRequest"

@@ -84,8 +84,9 @@ public class clientPurchaseRequestsScreen extends Fragment {
                                 String status = document.get("status").toString();
                                 Boolean deletedFromCook = Boolean.parseBoolean(document.get("deletedFromCook").toString());
                                 Boolean isReviewed = Boolean.parseBoolean(document.get("isReviewed").toString());
+                                Boolean submittedComplaint = Boolean.parseBoolean(document.get("submittedComplaint").toString());
 
-                                OrderRequest order = new OrderRequest(cookEmail, clientEmail, id, mealTitle, price, status, deletedFromClient, deletedFromCook, isReviewed);
+                                OrderRequest order = new OrderRequest(cookEmail, clientEmail, id, mealTitle, price, status, deletedFromClient, deletedFromCook, isReviewed, submittedComplaint);
                                 orders.add(order);
                             }
 
