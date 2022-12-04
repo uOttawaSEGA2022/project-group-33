@@ -41,28 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        make new complaint
-        database = new Database();
-
-        database.getFirestore().collection("complaints").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Map<String, Object> city = new HashMap<>();
-                city.put("from", "test3@email.com");
-                city.put("to", "cook@mail.com");
-                city.put("message", "food was not tast22y");
-
-                Date c = Calendar.getInstance().getTime();
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault());
-                String formattedDate = df.format(c);
-
-                city.put("date", formattedDate);
-                city.put("id", task.getResult().size());
-                database.getFirestore().collection("complaints").document(Integer.toString(task.getResult().size())).set(city);
-            }
-        });
-
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

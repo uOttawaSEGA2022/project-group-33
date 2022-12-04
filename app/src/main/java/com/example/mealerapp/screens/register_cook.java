@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +40,7 @@ public class register_cook extends Fragment {
     private FirebaseFirestore fb;
     private EditText emailEditText;
     private EditText passwordEditText;
+    private EditText chefNameEditText;
 
     public register_cook() {
         // Required empty public constructor
@@ -91,6 +93,9 @@ public class register_cook extends Fragment {
                 passwordEditText = (EditText)getView().findViewById(R.id.input_password4);
                 String password = passwordEditText.getText().toString();
 
+                chefNameEditText = (EditText)getView().findViewById(R.id.input_chef_name);
+                String chefName = chefNameEditText.getText().toString();
+
                 if (!Helper.isValidEmail(email)) {
                     getView().findViewById(R.id.email_error3).setVisibility(View.VISIBLE);
                 } else {
@@ -103,20 +108,31 @@ public class register_cook extends Fragment {
                     getView().findViewById(R.id.password_error3).setVisibility(View.GONE);
                 }
 
-                if (Helper.isValidEmail(email) && Helper.isPasswordValid(password)) {
+                if (chefName.length() < 1) {
+                    getView().findViewById(R.id.register_cook_chef_name_error).setVisibility(View.VISIBLE);
+                } else {
+                    getView().findViewById(R.id.register_cook_chef_name_error).setVisibility(View.INVISIBLE);
+                }
+
+                if (Helper.isValidEmail(email) && Helper.isPasswordValid(password) && chefName.length() > 0) {
 
                     database.getFirestore().collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                             Map<String,Object> users = new HashMap<>();
-                            String id = Integer.toString(task.getResult().size());
+                            UUID uuid= UUID.randomUUID();
+                            String id = uuid.toString();
+
                             users.put("email", email);
                             users.put("password", password);
                             users.put("type", "COOK");
                             users.put("id", id);
                             users.put("permanentSuspension", false);
                             users.put("tempSuspension", "null");
+                            users.put("chefName", chefName);
+                            users.put("numberOfRatings", 0);
+                            users.put("rating", 0);
 
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "COOK");

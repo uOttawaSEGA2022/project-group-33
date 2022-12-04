@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,14 +55,6 @@ public class cookWelcomeScreen extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_cook_welcome_screen.
-     */
     // TODO: Rename and change types and number of parameters
     public static cookWelcomeScreen newInstance(String param1, String param2) {
         cookWelcomeScreen fragment = new cookWelcomeScreen();
@@ -93,8 +86,8 @@ public class cookWelcomeScreen extends Fragment {
         TextView unbannedOnText = getView().findViewById(R.id.willBeUnsuspendedBy);
         TextView tempSuspensionDateText = getView().findViewById(R.id.tempSusDate);
 
-        Button addMealButton = getView().findViewById(R.id.findMeal);
-        Button viewMealsButton = getView().findViewById(R.id.purchaseRequest);
+        Button addMealButton = getView().findViewById(R.id.addMeal);
+        Button viewMealsButton = getView().findViewById(R.id.viewMeals);
 
         addMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,14 +119,14 @@ public class cookWelcomeScreen extends Fragment {
         database.getFirestore().collection("users").document(cookId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.getResult().get("permanentSuspension").toString() == "true") {
+                if (task.getResult().get("permanentSuspension").toString().equals("true")) {
                     addMealButton.setVisibility(View.GONE);
                     viewMealsButton.setVisibility(View.GONE);
                     tempSuspensionText.setVisibility(View.GONE);
                     unbannedOnText.setVisibility(View.GONE);
                     tempSuspensionDateText.setVisibility(View.GONE);
                     permSuspensionText.setVisibility(View.VISIBLE);
-                } else if (task.getResult().get("tempSuspension").toString() == "null") {
+                } else if (task.getResult().get("tempSuspension").toString().equals("null")) {
                     permSuspensionText.setVisibility(View.GONE);
                     tempSuspensionText.setVisibility(View.GONE);
                     unbannedOnText.setVisibility(View.GONE);
@@ -141,7 +134,7 @@ public class cookWelcomeScreen extends Fragment {
 
                     addMealButton.setVisibility(View.VISIBLE);
                     viewMealsButton.setVisibility(View.VISIBLE);
-                } else if (task.getResult().get("tempSuspension").toString() != "null") {
+                } else if (!task.getResult().get("tempSuspension").toString().equals("null")) {
                     endDateTempSuspension = task.getResult().get("tempSuspension").toString();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
                     Date tempSuspensionDate;
@@ -242,8 +235,9 @@ public class cookWelcomeScreen extends Fragment {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                             Map<String,Object> meal = new HashMap<>();
-                            mealsAddedThisSession++;
-                            String id = Integer.toString(task.getResult().size() + mealsAddedThisSession);
+                            UUID uuid= UUID.randomUUID();
+                            String id = uuid.toString();
+                            
                             meal.put("mealName", mealTitleInput.getText().toString());
                             meal.put("mealDescription", mealDescriptionInput.getText().toString());
                             meal.put("price", mealPriceInput.getText().toString());

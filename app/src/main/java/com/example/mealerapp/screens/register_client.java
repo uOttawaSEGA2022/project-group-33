@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,7 +106,10 @@ public class register_client extends Fragment {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                             Map<String,Object> users = new HashMap<>();
-                            String id = Integer.toString(task.getResult().size());
+
+                            UUID uuid= UUID.randomUUID();
+                            String id = uuid.toString();
+
                             users.put("email", email);
                             users.put("password", password);
                             users.put("type", "CLIENT");
