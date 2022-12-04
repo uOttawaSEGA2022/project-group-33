@@ -16,7 +16,7 @@
         android:fontFamily="sans-serif-black"
         android:gravity="center"
         android:text="Meal Name"
-        app:layout_constraintEnd_toStartOf="@+id/clientOrderMealTitle"
+        app:layout_constraintEnd_toStartOf="@+id/cookOrderMealTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -43,7 +43,18 @@
         app:layout_constraintTop_toBottomOf="@+id/pr" />
 
     <TextView
-        android:id="@+id/clientOrderMealTitle"
+        android:id="@+id/pr2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-black"
+        android:text="From:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pr3" />
+
+    <TextView
+        android:id="@+id/cookOrderMealTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -53,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/clientOrderMealPrice"
+        android:id="@+id/cookOrderMealPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -63,19 +74,31 @@
         app:layout_constraintTop_toBottomOf="@+id/mt" />
 
     <Button
-        android:id="@+id/clientReviewChef"
+        android:id="@+id/cookApproveRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Review Chef"
+        android:backgroundTint="#4CAF50"
+        android:text="Approve Request"
         android:textSize="10sp"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pr3" />
+        app:layout_constraintTop_toBottomOf="@+id/pr2" />
 
     <Button
-        android:id="@+id/clientDeleteRequest"
+        android:id="@+id/cookRejectRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#E91E63"
+        android:text="Reject Request"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/cookApproveRequest"
+        app:layout_constraintTop_toBottomOf="@+id/pr2" />
+
+    <Button
+        android:id="@+id/cookDeleteRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -84,17 +107,27 @@
         android:text="Delete"
         android:textSize="10sp"
         android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/clientReviewChef"
-        app:layout_constraintTop_toBottomOf="@+id/pr3" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cookApproveRequest" />
 
     <TextView
-        android:id="@+id/clientRequestStatus"
+        android:id="@+id/cookRequestStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/pr3"
-        app:layout_constraintTop_toBottomOf="@+id/clientOrderMealPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/cookOrderMealPrice" />
+
+    <TextView
+        android:id="@+id/cookFromEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        app:layout_constraintStart_toEndOf="@+id/pr2"
+        app:layout_constraintTop_toBottomOf="@+id/cookRequestStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -25,6 +25,7 @@ import com.example.mealerapp.objects.Database;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.ParseException;
@@ -88,6 +89,8 @@ public class cookWelcomeScreen extends Fragment {
 
         Button addMealButton = getView().findViewById(R.id.addMeal);
         Button viewMealsButton = getView().findViewById(R.id.viewMeals);
+        Button viewProfileButton = getView().findViewById(R.id.cookViewProfile);
+        Button viewPurchasesButton = getView().findViewById(R.id.cookViewPurchases);
 
         addMealButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +111,59 @@ public class cookWelcomeScreen extends Fragment {
             }
         });
 
+        viewProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                database.getFirestore().collection("users").whereEqualTo("email", cookEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String chefNameText = document.get("chefName").toString();
+                                String numberOfRatingsText = document.get("numberOfRatings").toString();
+                                String ratingText = document.get("rating").toString();
+
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                                dialog.setMessage("View Chef Profile");
+
+                                LinearLayout layout = new LinearLayout(getContext());
+                                layout.setOrientation(LinearLayout.VERTICAL);
+
+                                TextView chefName = new TextView(getContext());
+                                chefName.setText("Chef Name: " + chefNameText);
+                                chefName.setPadding(40, 10, 0 , 10);
+                                layout.addView(chefName);
+
+                                TextView rating = new TextView(getContext());
+                                rating.setText("Rating: " + ratingText);
+                                rating.setPadding(40, 40, 0 , 10);
+                                layout.addView(rating);
+
+                                TextView numberOfRatings = new TextView(getContext());
+                                numberOfRatings.setText("Number of ratings: " + numberOfRatingsText);
+                                numberOfRatings.setPadding(40, 40, 0 , 40);
+                                layout.addView(numberOfRatings);
+
+                                dialog.setView(layout);
+                                dialog.show();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+
+        viewPurchasesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("email", cookEmail);
+                bundle.putString("id", cookId);
+
+                NavHostFragment.findNavController(cookWelcomeScreen.this).navigate(R.id.cookWelcome_to_purchases, bundle);
+            }
+        });
+
         permSuspensionText.setVisibility(View.GONE);
         tempSuspensionText.setVisibility(View.GONE);
         unbannedOnText.setVisibility(View.GONE);
@@ -115,6 +171,8 @@ public class cookWelcomeScreen extends Fragment {
         permSuspensionText.setVisibility(View.GONE);
         addMealButton.setVisibility(View.GONE);
         viewMealsButton.setVisibility(View.GONE);
+        viewProfileButton.setVisibility(View.GONE);
+        viewPurchasesButton.setVisibility(View.GONE);
 
         database.getFirestore().collection("users").document(cookId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -122,6 +180,8 @@ public class cookWelcomeScreen extends Fragment {
                 if (task.getResult().get("permanentSuspension").toString().equals("true")) {
                     addMealButton.setVisibility(View.GONE);
                     viewMealsButton.setVisibility(View.GONE);
+                    viewProfileButton.setVisibility(View.GONE);
+                    viewPurchasesButton.setVisibility(View.GONE);
                     tempSuspensionText.setVisibility(View.GONE);
                     unbannedOnText.setVisibility(View.GONE);
                     tempSuspensionDateText.setVisibility(View.GONE);
@@ -134,6 +194,8 @@ public class cookWelcomeScreen extends Fragment {
 
                     addMealButton.setVisibility(View.VISIBLE);
                     viewMealsButton.setVisibility(View.VISIBLE);
+                    viewProfileButton.setVisibility(View.VISIBLE);
+                    viewPurchasesButton.setVisibility(View.VISIBLE);
                 } else if (!task.getResult().get("tempSuspension").toString().equals("null")) {
                     endDateTempSuspension = task.getResult().get("tempSuspension").toString();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
@@ -151,6 +213,8 @@ public class cookWelcomeScreen extends Fragment {
                         permSuspensionText.setVisibility(View.GONE);
                         addMealButton.setVisibility(View.GONE);
                         viewMealsButton.setVisibility(View.GONE);
+                        viewProfileButton.setVisibility(View.GONE);
+                        viewPurchasesButton.setVisibility(View.GONE);
                         tempSuspensionDateText.setText(endDateTempSuspension + " (yyyy mm dd)");
 
                         tempSuspensionText.setVisibility(View.VISIBLE);
@@ -164,6 +228,8 @@ public class cookWelcomeScreen extends Fragment {
 
                         addMealButton.setVisibility(View.VISIBLE);
                         viewMealsButton.setVisibility(View.VISIBLE);
+                        viewProfileButton.setVisibility(View.VISIBLE);
+                        viewPurchasesButton.setVisibility(View.VISIBLE);
                     }
                 }
             }
@@ -237,7 +303,7 @@ public class cookWelcomeScreen extends Fragment {
                             Map<String,Object> meal = new HashMap<>();
                             UUID uuid= UUID.randomUUID();
                             String id = uuid.toString();
-                            
+
                             meal.put("mealName", mealTitleInput.getText().toString());
                             meal.put("mealDescription", mealDescriptionInput.getText().toString());
                             meal.put("price", mealPriceInput.getText().toString());

@@ -132,6 +132,7 @@ public class register_cook extends Fragment {
                             users.put("tempSuspension", "null");
                             users.put("chefName", chefName);
                             users.put("numberOfRatings", 0);
+                            users.put("sumOfScore", 0);
                             users.put("rating", 0);
 
                             Bundle bundle = new Bundle();

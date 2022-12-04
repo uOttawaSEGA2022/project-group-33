@@ -56,6 +56,9 @@
         <action
             android:id="@+id/cookWelcome_to_listOfMeals"
             app:destination="@id/cookListMeals" />
+        <action
+            android:id="@+id/cookWelcome_to_purchases"
+            app:destination="@id/cookViewPurchaseRequests" />
     </fragment>
     <fragment
         android:id="@+id/cookListMeals"
@@ -84,4 +87,9 @@
         android:name="com.example.mealerapp.screens.clientPurchaseRequestsScreen"
         android:label="fragment_client_purchase_requests"
         tools:layout="@layout/fragment_client_purchase_requests" />
+    <fragment
+        android:id="@+id/cookViewPurchaseRequests"
+        android:name="com.example.mealerapp.screens.cookViewPurchaseRequests"
+        android:label="cook_view_purchase_requests"
+        tools:layout="@layout/cook_view_purchase_requests" />
 </navigation>

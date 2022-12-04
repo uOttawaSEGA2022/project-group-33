@@ -23,24 +23,24 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link clientPurchaseRequestsScreen#newInstance} factory method to
+ * Use the {@link cookViewPurchaseRequests#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class clientPurchaseRequestsScreen extends Fragment {
+public class cookViewPurchaseRequests extends Fragment {
 
-    ListView clientRequestsListView;
+    ListView cookRequestsListView;
     ArrayList<OrderRequest> orders;
-    clientRequestsAdapter requestsAdapter;
+    cookRequestsAdapter requestsAdapter;
     Database database;
-    String clientEmail;
+    String cookEmail;
 
-    public clientPurchaseRequestsScreen() {
+    public cookViewPurchaseRequests() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static clientPurchaseRequestsScreen newInstance(String param1, String param2) {
-        clientPurchaseRequestsScreen fragment = new clientPurchaseRequestsScreen();
+    public static cookViewPurchaseRequests newInstance(String param1, String param2) {
+        cookViewPurchaseRequests fragment = new cookViewPurchaseRequests();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -51,52 +51,51 @@ public class clientPurchaseRequestsScreen extends Fragment {
         super.onCreate(savedInstanceState);
         database = new Database();
         orders = new ArrayList<>();
-        clientEmail = getArguments().getString("clientEmail");
+        cookEmail = getArguments().getString("email");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_client_purchase_requests, container, false);
+        return inflater.inflate(R.layout.cook_view_purchase_requests, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        clientRequestsListView = getView().findViewById(R.id.clientPurchaseRequestList);
 
-        database.getFirestore().collection("orders").whereEqualTo("clientEmail", clientEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        cookRequestsListView = getView().findViewById(R.id.cookRequestListView);
+
+        database.getFirestore().collection("orders").whereEqualTo("cookEmail", cookEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     if (!task.getResult().isEmpty()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Boolean deletedFromClient = Boolean.parseBoolean(document.get("deletedFromClient").toString());
+                            Boolean deletedFromCook = Boolean.parseBoolean(document.get("deletedFromCook").toString());
 
-                            if (!deletedFromClient) {
+                            if (!deletedFromCook) {
                                 String clientEmail = document.get("clientEmail").toString();
                                 String cookEmail = document.get("cookEmail").toString();
                                 String id = document.get("id").toString();
                                 String mealTitle = document.get("mealTitle").toString();
                                 Float price = Float.parseFloat(document.get("price").toString());
                                 String status = document.get("status").toString();
-                                Boolean deletedFromCook = Boolean.parseBoolean(document.get("deletedFromCook").toString());
+                                Boolean deletedFromClient = Boolean.parseBoolean(document.get("deletedFromClient").toString());
                                 Boolean isReviewed = Boolean.parseBoolean(document.get("isReviewed").toString());
 
                                 OrderRequest order = new OrderRequest(cookEmail, clientEmail, id, mealTitle, price, status, deletedFromClient, deletedFromCook, isReviewed);
                                 orders.add(order);
                             }
-
                         }
 
-                        requestsAdapter = new clientRequestsAdapter(getView().getContext(), orders, clientRequestsListView);
-                        clientRequestsListView.setAdapter(requestsAdapter);
+                        requestsAdapter = new cookRequestsAdapter(getView().getContext(), orders, cookRequestsListView);
+                        cookRequestsListView.setAdapter(requestsAdapter);
                     }
                 }
             }
         });
-
     }
 }

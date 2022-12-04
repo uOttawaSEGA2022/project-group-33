@@ -7,6 +7,7 @@ public class Cook extends User {
     private String chefName;
     private int numberOfReviews;
     private float rating;
+    private int sumOfScores;
 
     public Cook(String email, String password) {
         super(email, password, UserType.COOK);

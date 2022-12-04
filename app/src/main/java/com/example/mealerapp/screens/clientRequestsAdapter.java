@@ -1,6 +1,8 @@
 package com.example.mealerapp.screens;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +10,17 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.mealerapp.R;
 import com.example.mealerapp.objects.OrderRequest;
 import com.example.mealerapp.objects.Database;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -22,6 +31,7 @@ public class clientRequestsAdapter extends BaseAdapter {
     LayoutInflater inlater;
     ListView lv;
     Database database;
+    int checkedScore;
 
     public clientRequestsAdapter(Context ctx, ArrayList<OrderRequest> orders, ListView lv) {
         this.context = ctx;
@@ -29,6 +39,10 @@ public class clientRequestsAdapter extends BaseAdapter {
         this.lv = lv;
         database = new Database();
         inlater = LayoutInflater.from(ctx);
+    }
+
+    public void setCheckedScore(int i) {
+        this.checkedScore = i;
     }
 
     @Override
@@ -60,16 +74,91 @@ public class clientRequestsAdapter extends BaseAdapter {
         status.setText(thisOrder.getStatus());
 
         Button reviewChef = view.findViewById(R.id.clientReviewChef);
+        Button deleteRequest = view.findViewById(R.id.clientDeleteRequest);
 
         reviewChef.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+                alertDialog.setTitle("AlertDialog");
+                String[] items = {"1","2","3","4","5"};
+                alertDialog.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                setCheckedScore(1);
+                                break;
+                            case 1:
+                                setCheckedScore(2);
+                                break;
+                            case 2:
+                                setCheckedScore(3);
+                                break;
+                            case 3:
+                                setCheckedScore(4);
+                                break;
+                            case 4:
+                                setCheckedScore(5);
+                                break;
+                        }
+                    }
+                });
 
+                alertDialog.setPositiveButton("Submit Review", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        database.getFirestore().collection("users").whereEqualTo("email", thisOrder.getCookEmail()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        int numberOfRatings = Integer.parseInt(document.get("numberOfRatings").toString());
+                                        numberOfRatings++;
+                                        database.getFirestore().collection("users").document(document.getId()).update("numberOfRatings", numberOfRatings);
+
+                                        int sumOfScore = Integer.parseInt(document.get( "sumOfScore").toString());
+                                        sumOfScore = sumOfScore + checkedScore;
+
+                                        float newScore = sumOfScore / numberOfRatings;
+                                        database.getFirestore().collection("users").document(document.getId()).update("sumOfScore", sumOfScore);
+                                        database.getFirestore().collection("users").document(document.getId()).update("rating", newScore);
+                                        thisOrder.setReviewed(true);
+                                        database.getFirestore().collection("orders").document(thisOrder.getId()).update("isReviewed", true);
+                                        reviewChef.setVisibility(View.GONE);
+                                        Toast.makeText(view.getContext(), "Review Sent!", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                AlertDialog alert = alertDialog.create();
+                alert.setCanceledOnTouchOutside(false);
+                alert.show();
             }
         });
 
-        if (thisOrder.getStatus().equals("approved")) {
+        deleteRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                database.getFirestore().collection("orders").document(thisOrder.getId()).update("deletedFromClient", true);
+                thisOrder.setDeletedFromClient(true);
+                orders.remove(orderIndex);
+                lv.invalidateViews();
+            }
+        });
+
+        if (thisOrder.getReviewed() == true) {
+            reviewChef.setVisibility(View.GONE);
+        } else {
             reviewChef.setVisibility(View.VISIBLE);
+        }
+
+        if (thisOrder.getStatus().equals("approved")) {
+            deleteRequest.setVisibility(View.VISIBLE);
+        } else if (thisOrder.getStatus().equals("rejected")) {
+            deleteRequest.setVisibility(View.VISIBLE);
         } else {
             reviewChef.setVisibility(View.GONE);
         }

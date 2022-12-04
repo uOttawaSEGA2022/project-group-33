@@ -67,8 +67,6 @@ public class clientFindMealsScreen extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         return inflater.inflate(R.layout.fragment_find_meals, container, false);
     }
 
@@ -104,29 +102,32 @@ public class clientFindMealsScreen extends Fragment {
                                                     }
 
                                                     String endDateTempSuspension = UserDocument.get("tempSuspension").toString();
-                                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
-                                                    Date tempSuspensionDate;
-                                                    Date todaysDate = new Date();
-                                                    try {
-                                                        tempSuspensionDate = sdf.parse(endDateTempSuspension);
-                                                    } catch (ParseException e) {
-                                                        tempSuspensionDate = null;
-                                                        e.printStackTrace();
+                                                    if (!endDateTempSuspension.equals("null")) {
+                                                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy MM dd");
+                                                        Date tempSuspensionDate;
+                                                        Date todaysDate = new Date();
+                                                        try {
+                                                            tempSuspensionDate = sdf.parse(endDateTempSuspension);
+                                                        } catch (ParseException e) {
+                                                            tempSuspensionDate = null;
+                                                            e.printStackTrace();
+                                                        }
+
+                                                        int todaysDateComparedToSuspensionDate = todaysDate.compareTo(tempSuspensionDate);
+                                                        if (todaysDateComparedToSuspensionDate < 0 || todaysDateComparedToSuspensionDate == 0) {
+                                                            return;
+                                                        }
                                                     }
 
-                                                    int todaysDateComparedToSuspensionDate = todaysDate.compareTo(tempSuspensionDate);
-                                                    if (todaysDateComparedToSuspensionDate < 0 || todaysDateComparedToSuspensionDate == 0) {
-                                                        // user is suspended
-                                                    } else {
-                                                        // user is not suspended
-                                                        String id = MealDocument.get("id").toString();
-                                                        String mealDescription = MealDocument.get("mealDescription").toString();
-                                                        String mealName = MealDocument.get("mealName").toString();
-                                                        boolean onOfferedList = (boolean) MealDocument.get("onOfferedList");
-                                                        float price = Float.parseFloat(MealDocument.get("price").toString());
-                                                        Meal c = new Meal(mealName, fromEmail, mealDescription, onOfferedList, price, id);
-                                                        meals.add(c);
-                                                    }
+                                                    // user is not suspended
+                                                    String id = MealDocument.get("id").toString();
+                                                    String mealDescription = MealDocument.get("mealDescription").toString();
+                                                    String mealName = MealDocument.get("mealName").toString();
+                                                    boolean onOfferedList = (boolean) MealDocument.get("onOfferedList");
+                                                    float price = Float.parseFloat(MealDocument.get("price").toString());
+                                                    Meal c = new Meal(mealName, fromEmail, mealDescription, onOfferedList, price, id);
+                                                    meals.add(c);
+
                                                 }
 
                                                 mealListAdapter = new clientMealListAdapter(getView().getContext(), meals, mealsListView, clientEmail);
@@ -137,9 +138,6 @@ public class clientFindMealsScreen extends Fragment {
                                 });
                             }
                         }
-
-
-
                     }
                 }
             }

@@ -1,12 +1,17 @@
 package com.example.mealerapp.screens;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +23,8 @@ import com.example.mealerapp.objects.Database;
 import com.example.mealerapp.objects.Meal;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,6 +96,9 @@ public class clientMealListAdapter extends ArrayAdapter {
                 placeOrder.put("mealTitle", thisMeal.getMealName());
                 placeOrder.put("price", thisMeal.getPrice());
                 placeOrder.put("status", "pending");
+                placeOrder.put("deletedFromCook", false);
+                placeOrder.put("deletedFromClient", false);
+                placeOrder.put("isReviewed", false);
 
                 database.getFirestore().collection("orders").document(uuid.toString()).set(placeOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -99,6 +109,49 @@ public class clientMealListAdapter extends ArrayAdapter {
             }
         });
 
+        viewChefProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String cookEmail = meals.get(mealIndex).getFromEmail();
+
+                database.getFirestore().collection("users").whereEqualTo("email", cookEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String chefNameText = document.get("chefName").toString();
+                                String numberOfRatingsText = document.get("numberOfRatings").toString();
+                                String ratingText = document.get("rating").toString();
+
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                                dialog.setMessage("View Chef Profile");
+
+                                LinearLayout layout = new LinearLayout(getContext());
+                                layout.setOrientation(LinearLayout.VERTICAL);
+
+                                TextView chefName = new TextView(getContext());
+                                chefName.setText("Chef Name: " + chefNameText);
+                                chefName.setPadding(40, 10, 0 , 10);
+                                layout.addView(chefName);
+
+                                TextView rating = new TextView(getContext());
+                                rating.setText("Rating: " + ratingText);
+                                rating.setPadding(40, 40, 0 , 10);
+                                layout.addView(rating);
+
+                                TextView numberOfRatings = new TextView(getContext());
+                                numberOfRatings.setText("Number of ratings: " + numberOfRatingsText);
+                                numberOfRatings.setPadding(40, 40, 0 , 40);
+                                layout.addView(numberOfRatings);
+
+                                dialog.setView(layout);
+                                dialog.show();
+                            }
+                        }
+                    }
+                });
+            }
+        });
 
         return view;
     }
