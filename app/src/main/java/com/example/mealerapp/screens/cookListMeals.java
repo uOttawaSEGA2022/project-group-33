@@ -52,6 +52,7 @@ public class cookListMeals extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new Database();
+        fromEmail = getArguments().getString("email");
     }
 
     @Override
@@ -67,13 +68,12 @@ public class cookListMeals extends Fragment {
         mealList = getView().findViewById(R.id.mealsListView);
         ArrayList<Meal> meals = new ArrayList<>();
 
-        database.getFirestore().collection("meals").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        database.getFirestore().collection("meals").whereEqualTo("fromEmail", fromEmail).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     if (!task.getResult().isEmpty()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            String fromEmail = document.get("fromEmail").toString();
                             String id = document.get("id").toString();
                             String mealDescription = document.get("mealDescription").toString();
                             String mealName = document.get("mealName").toString();
