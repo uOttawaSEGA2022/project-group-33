@@ -225,6 +225,7 @@ public class clientRequestsAdapter extends BaseAdapter {
         } else {
             reviewChef.setVisibility(View.GONE);
             submitComplaintButton.setVisibility(View.GONE);
+            deleteRequest.setVisibility(View.GONE);
         }
 
         return view;
