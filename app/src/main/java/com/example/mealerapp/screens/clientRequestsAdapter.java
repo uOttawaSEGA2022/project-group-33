@@ -135,8 +135,8 @@ public class clientRequestsAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
-                alertDialog.setTitle("AlertDialog");
-                String[] items = {"1","2","3","4","5"};
+                alertDialog.setTitle("Enter a score for the chef");
+                String[] items = {"1 (bad)","2","3","4","5 (amazing)"};
                 alertDialog.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -220,6 +220,8 @@ public class clientRequestsAdapter extends BaseAdapter {
             deleteRequest.setVisibility(View.VISIBLE);
         } else if (thisOrder.getStatus().equals("rejected")) {
             deleteRequest.setVisibility(View.VISIBLE);
+            reviewChef.setVisibility(View.GONE);
+            submitComplaintButton.setVisibility(View.GONE);
         } else {
             reviewChef.setVisibility(View.GONE);
             submitComplaintButton.setVisibility(View.GONE);

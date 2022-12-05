@@ -115,7 +115,7 @@ public class ComplaintListAdapter extends BaseAdapter {
                     DatePickerDialog datePicker = new DatePickerDialog(view.getContext());
                     datePicker.setMessage("Choose the end date of the temporary suspension");
 
-                    datePicker.setButton("Continue", new DialogInterface.OnClickListener() {
+                    datePicker.setButton(DialogInterface.BUTTON_POSITIVE, "Continue", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Calendar c = Calendar.getInstance();

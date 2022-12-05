@@ -69,7 +69,6 @@ public class LogInFragment extends Fragment {
                 passwordEditText = (EditText)getView().findViewById(R.id.input_password);
                 String password = passwordEditText.getText().toString();
 
-                Log.v("email", "YOOO " + email);
                 if (!Helper.isValidEmail(email)) {
                     getView().findViewById(R.id.email_error).setVisibility(View.VISIBLE);
                 } else {

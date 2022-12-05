@@ -70,7 +70,7 @@
         android:layout_marginTop="16dp"
         android:text="Review Chef"
         android:textSize="10sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pr3" />
 
@@ -79,11 +79,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#E91E63"
         android:text="Submit Complaint"
         android:textSize="10sp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clientReviewChef" />
 
@@ -91,13 +91,13 @@
         android:id="@+id/clientDeleteRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#E91E63"
         android:text="Delete"
         android:textSize="10sp"
-        android:visibility="gone"
-        app:layout_constraintStart_toEndOf="@+id/clientReviewChef"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/clientRequestStatus"
         app:layout_constraintTop_toBottomOf="@+id/pr3" />
 
     <TextView
